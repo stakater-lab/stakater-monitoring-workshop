@@ -1,0 +1,15 @@
+---
+# Source: influxdb/templates/init-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "influxdb-init"
+  namespace: storage
+  labels:
+    app: "influxdb"
+    chart: "influxdb-3.0.1"
+    release: "influxdb"
+    heritage: "Tiller"
+data:
+  init.iql: CREATE DATABASE "prometheus"
+  

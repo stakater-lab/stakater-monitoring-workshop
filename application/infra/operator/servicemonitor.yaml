@@ -1,0 +1,20 @@
+---
+# Source: prometheus-operator/templates/prometheus-operator/servicemonitor.yaml
+
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: stakater-operator
+  namespace: NAMESPACE
+  labels:
+    app: stakater-operator
+spec:
+  endpoints:
+  - port: http
+    honorLabels: true
+  selector:
+    matchLabels:
+      app: stakater-operator
+  namespaceSelector:
+    matchNames:
+      - NAMESPACE

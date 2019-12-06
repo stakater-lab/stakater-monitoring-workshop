@@ -1,0 +1,19 @@
+---
+# Source: prometheus-operator/templates/prometheus-operator/service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: stakater-operator
+  namespace: NAMESPACE
+  labels:
+    app: stakater-operator
+    
+spec:
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http
+  selector:
+    app: stakater-operator
+  type: "ClusterIP"

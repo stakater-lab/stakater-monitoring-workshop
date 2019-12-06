@@ -1,0 +1,17 @@
+---
+# Source: prometheus-operator/templates/prometheus-operator/clusterrolebinding.yaml
+apiVersion: authorization.openshift.io/v1
+groupNames: []
+kind: ClusterRoleBinding
+metadata:
+  name: stakater-operator
+  namespace: NAMESPACE
+roleRef:
+  kind: ClusterRole
+  name: stakater-operator
+subjects:
+- kind: ServiceAccount
+  name: stakater-monitoring
+  namespace: NAMESPACE
+userNames:
+- system:serviceaccount:NAMESPACE:stakater-monitoring

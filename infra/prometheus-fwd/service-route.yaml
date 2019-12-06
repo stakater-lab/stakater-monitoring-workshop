@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.alpha.openshift.io/serving-cert-secret-name: prometheus-k8s-tls
+    service.alpha.openshift.io/serving-cert-signed-by: openshift-service-serving-signer@1575399347
+  labels:
+    prometheus: prometheus-prometheus-forwarder
+  name: prometheus-forwarder
+  namespace: openshift-monitoring
+spec:
+  ports:
+  - name: web
+    port: 9091
+    protocol: TCP
+    targetPort: web
+  selector:
+    app: prometheus
+    prometheus: prometheus-forwarder
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+  type: ClusterIP
