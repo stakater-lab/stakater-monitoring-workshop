@@ -1,7 +1,7 @@
 #!/bin/bash
 set -x
 
-NAMESPACE=test-prom # Change with REPLACE_ME
+NAMESPACE=participant-3 # CHANGE ME
 
 # Setup vars for individual namespaces
 ./setup-vars.sh $NAMESPACE
@@ -17,4 +17,4 @@ oc apply -f infra/operator/.
 oc apply -f infra/prometheus/.
 
 # Deploy Nordmart Services
-#oc apply -f nordmart/.
+oc apply -f nordmart/.

@@ -1,5 +1,5 @@
 # Destroy Nordmart Services
-#oc delete -f nordmart/.
+oc delete -f nordmart/.
 
 ## Destroy Prometheus
 oc delete -f infra/prometheus/.

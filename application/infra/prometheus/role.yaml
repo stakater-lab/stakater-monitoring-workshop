@@ -1,0 +1,11 @@
+apiVersion: authorization.openshift.io/v1
+kind: Role
+metadata:
+  name: prometheus-NAMESPACE
+rules:
+- apiGroups:
+  - '*'
+  resources:
+  - '*'
+  verbs:
+  - '*'
