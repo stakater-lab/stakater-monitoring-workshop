@@ -4,4 +4,4 @@ metadata:
   annotations:
     openshift.io/display-name: ""
     openshift.io/node-selector: ""
-  name: test-prom
+  name: NAMESPACE
