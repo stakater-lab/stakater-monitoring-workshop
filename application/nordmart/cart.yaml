@@ -7,27 +7,10 @@ metadata:
   namespace: NAMESPACE
   labels:
     app: cart
-    group: com.stakater.platform
-    provider: stakater
-    version: "1.0.0"
-    expose: "true"
-    
-  annotations:
-    config.xposer.stakater.com/Domain: cp-stakater.com
-    config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-dev'
-    config.xposer.stakater.com/IngressURLTemplate: '{{.Service}}-dev.{{.Domain}}'
-    config.xposer.stakater.com/TLS: "true"
-    config.xposer.stakater.com/TLSSecretNameTemplate: tls-cert
-    xposer.stakater.com/annotations: |-
-      kubernetes.io/ingress.class: external-ingress
-      ingress.kubernetes.io/force-ssl-redirect: true
-      exposeIngressUrl: locally
-    
   name: cart
 spec:
   selector:
     app: cart
-    
   ports:
     - name: https
       port: 8080
@@ -42,12 +25,6 @@ metadata:
   namespace: NAMESPACE
   labels:
     app: cart
-    group: com.stakater.platform
-    provider: stakater
-    version: "1.0.0"
-  annotations:
-    reloader.stakater.com/auto: "true"
-    
   name: cart
 spec:
   replicas: 1
@@ -55,11 +32,6 @@ spec:
     metadata:
       labels:
         app: cart
-        group: com.stakater.platform
-        provider: stakater
-        version: "1.0.0"
-        app: cart
-        
     spec:
       containers:
       - name: cart
@@ -69,7 +41,7 @@ spec:
         - name: CATALOG_ENDPOINT
           value: catalog.NAMESPACE.svc:8080
           
-          
+
         livenessProbe:
           failureThreshold: 3
           httpGet:

@@ -7,14 +7,12 @@ items:
   metadata:
     name: stakater-nordmart-catalog-dev-monitor
     labels:
-      release: stakater-monitoring-po
       prometheus: prometheus-NAMESPACE
     namespace: NAMESPACE
   spec:
     jobLabel: k8s-app
     selector:
       matchLabels:
-        release: nordmart-dev-catalog     # All services with this label will be monitored.
         app: catalog
     namespaceSelector:
       matchNames:

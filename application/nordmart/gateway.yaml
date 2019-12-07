@@ -7,27 +7,10 @@ metadata:
   namespace: NAMESPACE
   labels:
     app: gateway
-    group: com.stakater.platform
-    provider: stakater
-    version: "1.0.0"
-    expose: "true"
-    
-  annotations:
-    config.xposer.stakater.com/Domain: cp-stakater.com
-    config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-dev'
-    config.xposer.stakater.com/IngressURLTemplate: '{{.Service}}-dev.{{.Domain}}'
-    config.xposer.stakater.com/TLS: "true"
-    config.xposer.stakater.com/TLSSecretNameTemplate: tls-cert
-    xposer.stakater.com/annotations: |-
-      kubernetes.io/ingress.class: external-ingress
-      ingress.kubernetes.io/force-ssl-redirect: true
-      exposeIngressUrl: locally
-    
   name: gateway
 spec:
   selector:
     app: gateway
-    
   ports:
     - name: https
       port: 8080
@@ -42,24 +25,13 @@ metadata:
   namespace: NAMESPACE
   labels:
     app: gateway
-    group: com.stakater.platform
-    provider: stakater
-    version: "1.0.0"
-  annotations:
-    reloader.stakater.com/auto: "true"
-    
   name: gateway
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: gateway
-        group: com.stakater.platform
-        provider: stakater
-        version: "1.0.0"
-        app: gateway
-        
+        app: gateway       
     spec:
       containers:
       - name: gateway

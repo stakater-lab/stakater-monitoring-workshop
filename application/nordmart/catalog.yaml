@@ -6,28 +6,11 @@ kind: Service
 metadata:
   namespace: NAMESPACE
   labels:
-    app: catalog
-    group: com.stakater.platform
-    provider: stakater
-    version: "1.0.0"
-    expose: "true"
-    
-  annotations:
-    config.xposer.stakater.com/Domain: cp-stakater.com
-    config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-dev'
-    config.xposer.stakater.com/IngressURLTemplate: '{{.Service}}-dev.{{.Domain}}'
-    config.xposer.stakater.com/TLS: "true"
-    config.xposer.stakater.com/TLSSecretNameTemplate: tls-cert
-    xposer.stakater.com/annotations: |-
-      kubernetes.io/ingress.class: external-ingress
-      ingress.kubernetes.io/force-ssl-redirect: true
-      exposeIngressUrl: locally
-    
+    app: catalog    
   name: catalog
 spec:
   selector:
     app: catalog
-    
   ports:
     - name: https
       port: 8080
@@ -41,25 +24,14 @@ kind: Deployment
 metadata:
   namespace: NAMESPACE
   labels:
-    app: catalog
-    group: com.stakater.platform
-    provider: stakater
-    version: "1.0.0"
-  annotations:
-    reloader.stakater.com/auto: "true"
-    
+    app: catalog    
   name: catalog
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: catalog
-        group: com.stakater.platform
-        provider: stakater
-        version: "1.0.0"
-        app: catalog
-        
+        app: catalog        
     spec:
       containers:
       - name: catalog
