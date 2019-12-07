@@ -8,14 +8,10 @@ metadata:
   namespace: NAMESPACE
 spec:
   ports:
-  - name: http
-    port: 9090
-    protocol: TCP
-    targetPort: 9090
   - name: web
     port: 9091
     protocol: TCP
-    targetPort: 9091
+    targetPort: web
   selector:
     app: prometheus
     prometheus: prometheus-NAMESPACE
