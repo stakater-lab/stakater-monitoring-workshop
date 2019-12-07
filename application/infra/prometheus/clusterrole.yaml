@@ -41,3 +41,5 @@ rules:
   - services
   verbs:
   - get
+  - watch
+  - list
