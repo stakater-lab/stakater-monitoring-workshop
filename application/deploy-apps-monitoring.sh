@@ -9,6 +9,9 @@ NAMESPACE=participant-3 # CHANGE ME
 # Create Namespace
 oc apply -f namespace.yaml
 
+# Create storage class 
+oc apply -f storage-class.yaml
+
 # Deploy Monitoring
 ## Deploy Prometheus Operator
 oc apply -f infra/operator/.
