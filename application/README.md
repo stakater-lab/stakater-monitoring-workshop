@@ -25,54 +25,59 @@ This document provides the guidelines to deploy Nordmart Application with its re
 │   │
 │   │
 │   └── prometheus  # It contains prometheus manifests
-│       ├── prometheus.yaml
+│       ├── clusterrole.yaml
+|       ├── clusterrolebinding.yaml
+|       ├── prometheus-htpasswd.yaml
+|       ├── prometheus-proxy.yaml
+|       ├── prometheus-tls.yaml
+|       ├── prometheus.yaml
 │       ├── rolebinding.yaml
 │       ├── role.yaml
 │       ├── route.yaml
 │       ├── serviceaccount.yaml
-│       └── service.yaml
-│
+|       └── service.yaml
+│      
 │
 ├── namespace.yaml  # It contains namespace manifest
 │
 │
 ├── nordmart  # It contains manifests for Nordmart Application
-
-    # Prometheus specific configuration
+|
+|   # Prometheus specific configuration
 │   ├── catalog-prometheus-rule.yaml
 │   ├── catalog-service-dashboard.yaml
 │   ├── catalog-service-monitor.yaml
-
-    # Application specific configuration
+|
+|   # Application specific configuration
 │   ├── clusterrolebinding.yaml
 │   ├── clusterrole.yaml
 │   ├── serviceaccount.yaml
-
-    # Normart Application Microservice
+|
+|   # Normart Application Microservice
 │   ├── cart.yaml
 │   ├── catalog.yaml
 │   ├── gateway.yaml
 │   ├── inventory.yaml
 │   ├── web.yaml
 │   ├── review.yaml
-
-    # Database Manifests
+|
+|   # Database Manifests
 │   ├── mongo.yaml
 │   ├── mysql-secret.yaml
 │   ├── mysql.yaml
-
-    # Nordmart Application Microservices
+|
+|   # Nordmart Application Microservices
 │   ├── route-gateway.yaml
 │   └── route-web.yaml
 │
-
-    # Documentation
+|
+|   # Documentation
 ├── README.md
-    
-    # Bash Scripts to replace the NAMESPACE placeholder in all manifests with user specified value
+|    
+|   # Bash Scripts to replace the NAMESPACE placeholder in all manifests with user specified value
 ├── setup-vars.sh
-
-    # Storage Class manifest
+|
+|   # Storage Class manifest
 └── storage-class.yaml
 
 ```
@@ -128,10 +133,10 @@ Follow the guidelines given below to deploy the application:
     oc apply -f nordmart/.
     ```
 
-3. Use the command given below to services and namespaces:
+3. Use the command given below to destroy services and namespaces:
     ```bash
-    # Deploy Nordmart Services
-    ./deploy-apps-monitoring.sh
+    # Destroy Application monitroing services
+    ./destroy-apps-monitoring.sh
     ```
     
     Above script performs following tasks:
