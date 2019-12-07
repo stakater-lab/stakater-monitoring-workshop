@@ -1,0 +1,43 @@
+apiVersion: authorization.openshift.io/v1
+kind: ClusterRole
+metadata:
+  name: prometheus-NAMESPACE
+  namespace: NAMESPACE
+rules:
+- apiGroups:
+  - ""
+  attributeRestrictions: null
+  resources:
+  - nodes/metrics
+  verbs:
+  - get
+- apiGroups: null
+  attributeRestrictions: null
+  nonResourceURLs:
+  - /metrics
+  resources: []
+  verbs:
+  - get
+- apiGroups:
+  - authentication.k8s.io
+  attributeRestrictions: null
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - authorization.k8s.io
+  attributeRestrictions: null
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
+- apiGroups:
+  - ""
+  attributeRestrictions: null
+  resources:
+  - namespaces
+  - pods
+  - services
+  verbs:
+  - get

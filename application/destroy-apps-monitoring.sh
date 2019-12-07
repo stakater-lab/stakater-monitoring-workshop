@@ -8,7 +8,7 @@ oc delete -f infra/prometheus/.
 oc delete -f infra/operator/.
 
 ## Destroy storage class
-oc apply -f storage-class.yaml
+oc delete -f storage-class.yaml
 
 # Destroy namespace
 oc delete -f namespace.yaml

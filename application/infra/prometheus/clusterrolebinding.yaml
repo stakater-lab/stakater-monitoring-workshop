@@ -1,11 +1,11 @@
 apiVersion: authorization.openshift.io/v1
 groupNames: []
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
   name: prometheus-NAMESPACE
   namespace: NAMESPACE
 roleRef:
-  kind: Role
+  kind: ClusterRole
   name: prometheus-NAMESPACE
 subjects:
 - kind: ServiceAccount
