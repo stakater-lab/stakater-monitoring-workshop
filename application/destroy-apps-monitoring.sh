@@ -1,2 +1,2 @@
 # Destroy Application monitoring by deleting namespace
-oc delete namespace.yaml
+oc delete -f namespace.yaml
