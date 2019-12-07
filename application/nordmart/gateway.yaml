@@ -1,0 +1,109 @@
+---
+# Source: application/templates/service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: NAMESPACE
+  labels:
+    app: gateway
+    group: com.stakater.platform
+    provider: stakater
+    version: "1.0.0"
+    expose: "true"
+    
+  annotations:
+    config.xposer.stakater.com/Domain: cp-stakater.com
+    config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-dev'
+    config.xposer.stakater.com/IngressURLTemplate: '{{.Service}}-dev.{{.Domain}}'
+    config.xposer.stakater.com/TLS: "true"
+    config.xposer.stakater.com/TLSSecretNameTemplate: tls-cert
+    xposer.stakater.com/annotations: |-
+      kubernetes.io/ingress.class: external-ingress
+      ingress.kubernetes.io/force-ssl-redirect: true
+      exposeIngressUrl: locally
+    
+  name: gateway
+spec:
+  selector:
+    app: gateway
+    
+  ports:
+    - name: https
+      port: 8080
+      targetPort: 8080
+    
+---
+# Source: application/templates/deployment.yaml
+
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  namespace: NAMESPACE
+  labels:
+    app: gateway
+    group: com.stakater.platform
+    provider: stakater
+    version: "1.0.0"
+  annotations:
+    reloader.stakater.com/auto: "true"
+    
+  name: gateway
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: gateway
+        group: com.stakater.platform
+        provider: stakater
+        version: "1.0.0"
+        app: gateway
+        
+    spec:
+      containers:
+      - name: gateway
+        image: "stakater/stakater-nordmart-gateway:v0.0.1"
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: CATALOG_API_HOST
+            value: catalog.NAMESPACE.svc
+          - name: CATALOG_API_PORT
+            value: "8080"
+          - name: INVENTORY_API_HOST
+            value: inventory.NAMESPACE.svc
+          - name: INVENTORY_API_PORT
+            value: "8080"
+          - name: DISABLE_CART_DISCOVERY
+            value: "false"
+          - name: CART_API_HOST
+            value: cart.NAMESPACE.svc
+          - name: CART_API_PORT
+            value: "8080"
+          - name: HTTP_PORT
+            value: "8080"
+          - name: REVIEW_API_HOST
+            value: review.NAMESPACE.svc
+          - name: REVIEW_API_PORT
+            value: "8080"
+          
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+
+      serviceAccountName: default

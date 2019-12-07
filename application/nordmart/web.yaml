@@ -1,0 +1,95 @@
+---
+# Source: application/templates/service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: NAMESPACE
+  labels:
+    app: web
+    group: com.stakater.platform
+    provider: stakater
+    version: "1.0.0"
+    expose: "true"
+    
+  annotations:
+    config.xposer.stakater.com/Domain: cp-stakater.com
+    config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-dev'
+    config.xposer.stakater.com/IngressURLTemplate: '{{.Service}}-dev.{{.Domain}}'
+    config.xposer.stakater.com/TLS: "true"
+    config.xposer.stakater.com/TLSSecretNameTemplate: tls-cert
+    xposer.stakater.com/annotations: |-
+      kubernetes.io/ingress.class: external-ingress
+      ingress.kubernetes.io/force-ssl-redirect: true
+      exposeIngressUrl: locally
+    
+  name: web
+spec:
+  selector:
+    app: web
+    
+  ports:
+    - name: web
+      port: 4200
+      protocol: TCP
+      targetPort: 4200
+    
+---
+# Source: application/templates/deployment.yaml
+
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  namespace: NAMESPACE
+  labels:
+    app: web
+    group: com.stakater.platform
+    provider: stakater
+    version: "1.0.0"
+  annotations:
+    reloader.stakater.com/auto: "true"
+    sidecar.istio.io/inject: "true"
+    
+  name: web
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: web
+        group: com.stakater.platform
+        provider: stakater
+        version: "1.0.0"
+        app: web
+        
+    spec:
+      containers:
+      - name: web
+        image: "stakater/stakater-nordmart-web:v0.0.1"
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: PORT
+            value: "4200"
+          - name: SECURE_GW_ENDPOINT
+            value: https://gateway-dev.cp-stakater.com/
+          
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 4200
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 4200
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        
+      serviceAccountName: default

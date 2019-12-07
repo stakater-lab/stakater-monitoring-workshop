@@ -1,0 +1,100 @@
+---
+# Source: application/templates/service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: NAMESPACE
+  labels:
+    app: catalog
+    group: com.stakater.platform
+    provider: stakater
+    version: "1.0.0"
+    expose: "true"
+    
+  annotations:
+    config.xposer.stakater.com/Domain: cp-stakater.com
+    config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-dev'
+    config.xposer.stakater.com/IngressURLTemplate: '{{.Service}}-dev.{{.Domain}}'
+    config.xposer.stakater.com/TLS: "true"
+    config.xposer.stakater.com/TLSSecretNameTemplate: tls-cert
+    xposer.stakater.com/annotations: |-
+      kubernetes.io/ingress.class: external-ingress
+      ingress.kubernetes.io/force-ssl-redirect: true
+      exposeIngressUrl: locally
+    
+  name: catalog
+spec:
+  selector:
+    app: catalog
+    
+  ports:
+    - name: https
+      port: 8080
+      targetPort: 8080
+    
+---
+# Source: application/templates/deployment.yaml
+
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  namespace: NAMESPACE
+  labels:
+    app: catalog
+    group: com.stakater.platform
+    provider: stakater
+    version: "1.0.0"
+  annotations:
+    reloader.stakater.com/auto: "true"
+    
+  name: catalog
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: catalog
+        group: com.stakater.platform
+        provider: stakater
+        version: "1.0.0"
+        app: catalog
+        
+    spec:
+      containers:
+      - name: catalog
+        image: "stakater/stakater-nordmart-catalog:v0.0.1"
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: MYSQL_USER
+            value: root
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: mysql_password
+                name: mysql-secret
+          - name: MYSQL_HOST
+            value: mysql-svc.NAMESPACE.svc
+          - name: MYSQL_DB_NAME
+            value: catalog
+          
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 1
+        
+      serviceAccountName: default

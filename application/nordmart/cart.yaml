@@ -1,0 +1,92 @@
+---
+# Source: application/templates/service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: NAMESPACE
+  labels:
+    app: cart
+    group: com.stakater.platform
+    provider: stakater
+    version: "1.0.0"
+    expose: "true"
+    
+  annotations:
+    config.xposer.stakater.com/Domain: cp-stakater.com
+    config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-dev'
+    config.xposer.stakater.com/IngressURLTemplate: '{{.Service}}-dev.{{.Domain}}'
+    config.xposer.stakater.com/TLS: "true"
+    config.xposer.stakater.com/TLSSecretNameTemplate: tls-cert
+    xposer.stakater.com/annotations: |-
+      kubernetes.io/ingress.class: external-ingress
+      ingress.kubernetes.io/force-ssl-redirect: true
+      exposeIngressUrl: locally
+    
+  name: cart
+spec:
+  selector:
+    app: cart
+    
+  ports:
+    - name: https
+      port: 8080
+      targetPort: 8080
+    
+---
+# Source: application/templates/deployment.yaml
+
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  namespace: NAMESPACE
+  labels:
+    app: cart
+    group: com.stakater.platform
+    provider: stakater
+    version: "1.0.0"
+  annotations:
+    reloader.stakater.com/auto: "true"
+    
+  name: cart
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: cart
+        group: com.stakater.platform
+        provider: stakater
+        version: "1.0.0"
+        app: cart
+        
+    spec:
+      containers:
+      - name: cart
+        image: "stakater/stakater-nordmart-cart:v0.0.1"
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: CATALOG_ENDPOINT
+          value: catalog.NAMESPACE.svc:8080
+          
+          
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+          
+      serviceAccountName: default

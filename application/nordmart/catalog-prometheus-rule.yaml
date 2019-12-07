@@ -1,0 +1,23 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: k8s
+    role: prometheus-rulefiles
+    release: stakater-monitoring-po
+    kind: apps
+    app: stakater
+  name: prometheus-rules-catalog-dev
+  namespace: NAMESPACE
+spec:
+  groups:
+  - name: application-dev.rules
+    rules:
+    - alert: HighCatalogDevApiUsage
+      annotations:
+        message: 'Api usage is greater than 10.'
+      expr: count_requests_total{namespace="NAMESPACE"} > 10
+      for: 10s
+      labels:
+        kind: apps
+        severity: warning
