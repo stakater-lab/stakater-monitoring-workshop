@@ -39,6 +39,7 @@ rules:
   - namespaces
   - pods
   - services
+  - endpoints
   verbs:
   - get
   - watch
