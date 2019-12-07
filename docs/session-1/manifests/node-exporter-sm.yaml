@@ -1,0 +1,27 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  creationTimestamp: "2019-12-06T07:53:57Z"
+  generation: 1
+  labels:
+    k8s-app: node-exporter
+  name: node-exporter
+  namespace: openshift-monitoring
+  resourceVersion: "37224"
+  selfLink: /apis/monitoring.coreos.com/v1/namespaces/openshift-monitoring/servicemonitors/node-exporter
+  uid: 8e818d16-17fd-11ea-a063-000d3aa92502
+spec:
+  endpoints:
+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    interval: 30s
+    port: https
+    scheme: https
+    targetPort: 0
+    tlsConfig:
+      caFile: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+      serverName: node-exporter.openshift-monitoring.svc
+  jobLabel: k8s-app
+  namespaceSelector: {}
+  selector:
+    matchLabels:
+      k8s-app: node-exporter

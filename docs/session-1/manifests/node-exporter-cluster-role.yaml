@@ -1,0 +1,23 @@
+apiVersion: authorization.openshift.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: "2019-12-06T07:53:57Z"
+  name: node-exporter
+  resourceVersion: "37235"
+  selfLink: /apis/authorization.openshift.io/v1/clusterroles/node-exporter
+  uid: 8ea2dd6d-17fd-11ea-a063-000d3aa92502
+rules:
+- apiGroups:
+  - authentication.k8s.io
+  attributeRestrictions: null
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - authorization.k8s.io
+  attributeRestrictions: null
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
