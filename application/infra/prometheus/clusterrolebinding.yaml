@@ -1,0 +1,15 @@
+apiVersion: authorization.openshift.io/v1
+groupNames: []
+kind: ClusterRoleBinding
+metadata:
+  name: prometheus-NAMESPACE
+  namespace: NAMESPACE
+roleRef:
+  kind: ClusterRole
+  name: stakater-operator
+subjects:
+- kind: ServiceAccount
+  name: prometheus-NAMESPACE
+  namespace: NAMESPACE
+userNames:
+- system:serviceaccount:NAMESPACE:stakater-monitoring

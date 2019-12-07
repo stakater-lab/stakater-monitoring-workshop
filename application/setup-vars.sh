@@ -1,13 +1,11 @@
 #!/bin/bash
 set -x
 
-NAMESPACE:= nordmart-monitoring
+NAMESPACE=$1
 
-sed -i -e 's/NAMESPACE/$NAMESPACE/g' infra/operator/*
-sed -i -e 's/NAMESPACE/$NAMESPACE/g' infra/prometheus/*
+sed -i -e "s/NAMESPACE/${NAMESPACE}/g" namespace.yaml
 
-# Deploy Prometheus Operator
-oc apply -f operator/*
+sed -i -e "s/NAMESPACE/${NAMESPACE}/g" infra/operator/*
+sed -i -e "s/NAMESPACE/${NAMESPACE}/g" infra/prometheus/*
 
-# Deploy Prometheus
-oc apply -f prometheus/*
+sed -i -e "s/NAMESPACE/${NAMESPACE}/g" nordmart/*

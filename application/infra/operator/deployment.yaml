@@ -26,7 +26,7 @@ spec:
             - --logtostderr=true
             - --crd-apigroup=monitoring.coreos.com
             - --localhost=127.0.0.1
-            - --namespace=NAMESPACE
+            - --namespaces=NAMESPACE
             - --prometheus-config-reloader=quay.io/coreos/prometheus-config-reloader:v0.32.0
             - --config-reloader-image=quay.io/coreos/configmap-reload:v0.0.1
           ports:

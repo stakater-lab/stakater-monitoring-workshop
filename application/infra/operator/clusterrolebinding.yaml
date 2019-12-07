@@ -5,13 +5,13 @@ groupNames: []
 kind: ClusterRoleBinding
 metadata:
   name: stakater-operator
-  namespace: NAMESPACE
+  namespace: test-prom
 roleRef:
   kind: ClusterRole
   name: stakater-operator
 subjects:
 - kind: ServiceAccount
   name: stakater-monitoring
-  namespace: NAMESPACE
+  namespace: test-prom
 userNames:
-- system:serviceaccount:NAMESPACE:stakater-monitoring
+- system:serviceaccount:test-prom:stakater-monitoring
