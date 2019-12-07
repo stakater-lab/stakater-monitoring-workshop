@@ -106,4 +106,4 @@ spec:
           successThreshold: 1
           timeoutSeconds: 1
 
-      serviceAccountName: default
+      serviceAccountName: sa
