@@ -19,5 +19,8 @@ oc apply -f infra/operator/.
 ## Deploy Prometheus
 oc apply -f infra/prometheus/.
 
+## Deploy Grafana
+oc apply -f infra/grafana/.
+
 # Deploy Nordmart Services
 oc apply -f nordmart/.

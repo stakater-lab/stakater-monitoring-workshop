@@ -1,6 +1,9 @@
 # Destroy Nordmart Services
 oc delete -f nordmart/.
 
+## Deploy Grafana
+oc delete -f infra/grafana/.
+
 ## Destroy Prometheus
 oc delete -f infra/prometheus/.
 

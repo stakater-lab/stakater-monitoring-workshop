@@ -1,0 +1,19 @@
+# Source: prometheus-operator/charts/grafana/templates/rolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: participant-3-grafana
+  namespace: participant-3
+  labels:
+    app: grafana
+    chart: grafana-4.0.2
+    heritage: Tiller
+    release: participant-3
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: participant-3-grafana
+subjects:
+- kind: ServiceAccount
+  name: participant-3-grafana
+  namespace: participant-3

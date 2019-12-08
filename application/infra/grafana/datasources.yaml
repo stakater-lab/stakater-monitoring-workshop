@@ -1,0 +1,23 @@
+# Source: prometheus-operator/templates/grafana/configmaps-datasources.yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: participant-3-prometheus-opera-grafana-datasource
+  namespace: participant-3
+  labels:
+    grafana_datasource: "1"
+    app: prometheus-operator-grafana
+    
+    chart: prometheus-operator-8.2.0
+    release: "participant-3"
+    heritage: "Tiller"
+data:
+  datasource.yaml: |-
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-participant-3.cp-stakater.com
+      access: proxy
+      isDefault: true

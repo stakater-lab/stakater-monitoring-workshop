@@ -1,0 +1,23 @@
+# Source: prometheus-operator/charts/grafana/templates/configmap-dashboard-provider.yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: grafana
+    chart: grafana-4.0.2
+    release: participant-3
+    heritage: Tiller
+  name: participant-3-grafana-config-dashboards
+  namespace: participant-3
+data:
+  provider.yaml: |-
+    apiVersion: 1
+    providers:
+    - name: 'sidecarProvider'
+      orgId: 1
+      folder: ''
+      type: file
+      disableDeletion: false
+      options:
+        path: /tmp/dashboards

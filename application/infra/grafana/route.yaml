@@ -1,0 +1,24 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    prometheus: grafana-participant-3
+  name: route-grafana
+  namespace: participant-3
+spec:
+  host: grafana-participant-3.cp-stakater.com
+  port:
+    targetPort: web
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: participant-3-grafana
+    weight: 100
+  wildcardPolicy: None
+status:
+  ingress:
+    - host: grafana-participant-3.cp-stakater.com
+      routerName: router
+      wildcardPolicy: None
