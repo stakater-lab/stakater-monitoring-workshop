@@ -86,6 +86,72 @@ This document provides the guidelines to deploy Nordmart Application with its re
 
 Follow the guidelines given below to deploy the application:
 
+1. Replace the `NAMESPACE` placeholder with desired value in the `namespace.yaml` file, to create a new namespace using the command given below:
+
+    ```bash
+    oc apply -f namespace.yaml
+    ```
+
+    To check whether namespace is created or not:
+    ```bash
+    oc get namespaces | grep <namespace-name>
+    ```
+
+2. Once namespace is created, we will perform following operations: 
+
+    2.1. Deploy monitoring services that exists in `infra/` directory.
+    2.2. Deploy Nordmart application microservice that exists in `nordmart/` directory.  
+
+3. Deploying Monitoring Infrastructure Services
+
+    3.1 Deploy the Prometheus Operator using the manifests given in `/infra/operator/` directory. Follow the instructions one by one:
+
+    3.1.1. Create a service account:
+    
+    ```bash
+    oc apply -f serviceaccount.yaml
+    ```
+    To check whether serviceaccount is created or not:
+
+    ```bash
+    oc get serviceaccount -n <namespace> | grep <service-account>
+    ```
+    
+    To get the manifest of the serviceaccount:
+    ```bash
+    oc get serviceaccount <service-account-name> -oyaml -n <namespace>
+    ```
+
+    3.1.2 Create clusterrole:
+
+    ```bash
+    oc apply -f clusterrole.yaml
+    ```
+
+    To check whether clusterrole is created or not:
+    
+    ```bash
+    oc get clusterorle | grep <clusterrole>
+    ```
+
+    To get clusterrole manifest:
+
+    ```bash
+    oc get clusterrole <clusterrole> -oyaml
+    ```
+    
+    ```
+    MANIFEST
+    ```
+
+    3.1.3. Create clusterolebinding:
+
+    ```bash
+    
+    ```
+
+
+
 1. Change value of `NAMESPACE` variable in `deploy-apps-monitoring.sh` file.
 
 2. Use the command given below to deploy the application:
