@@ -6,9 +6,6 @@ metadata:
   namespace: NAMESPACE
   labels:
     app: grafana
-    chart: grafana-4.0.2
-    release: NAMESPACE
-    heritage: Tiller
 data:
   grafana.ini: |
     [analytics]

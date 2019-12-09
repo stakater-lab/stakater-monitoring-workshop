@@ -7,22 +7,17 @@ metadata:
   namespace: NAMESPACE
   labels:
     app: grafana
-    chart: grafana-4.0.2
-    release: NAMESPACE
-    heritage: Tiller
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: grafana
-      release: NAMESPACE
   strategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
         app: grafana
-        release: NAMESPACE
       annotations:
         checksum/config: 8e62afb844c79e1c855f33558c2b92748db99ae3cfc8bff8126af79f8ae2a239
         checksum/dashboards-json-config: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b

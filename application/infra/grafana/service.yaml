@@ -6,9 +6,6 @@ metadata:
   namespace: NAMESPACE
   labels:
     app: grafana
-    chart: grafana-4.0.2
-    release: NAMESPACE
-    heritage: Tiller
 spec:
   type: ClusterIP
   ports:
@@ -16,7 +13,5 @@ spec:
       port: 80
       protocol: TCP
       targetPort: 3000
-
   selector:
     app: grafana
-    release: NAMESPACE

@@ -6,9 +6,6 @@ metadata:
   namespace: NAMESPACE
   labels:
     app: grafana
-    chart: grafana-4.0.2
-    heritage: Tiller
-    release: NAMESPACE
 rules:
 - apiGroups:      ['extensions']
   resources:      ['podsecuritypolicies']

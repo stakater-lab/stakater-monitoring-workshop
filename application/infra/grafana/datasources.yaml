@@ -7,17 +7,13 @@ metadata:
   namespace: NAMESPACE
   labels:
     grafana_datasource: "1"
-    app: prometheus-operator-grafana
-    
-    chart: prometheus-operator-8.2.0
-    release: "NAMESPACE"
-    heritage: "Tiller"
+    app: grafana
 data:
   datasource.yaml: |-
     apiVersion: 1
     datasources:
     - name: Prometheus
       type: prometheus
-      url: http://prometheus-NAMESPACE.cp-stakater.com
-      access: proxy
+      url: prometheus-NAMESPACE.NAMESPACE.svc
+      # access: proxy
       isDefault: true

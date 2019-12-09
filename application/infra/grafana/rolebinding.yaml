@@ -6,9 +6,6 @@ metadata:
   namespace: NAMESPACE
   labels:
     app: grafana
-    chart: grafana-4.0.2
-    heritage: Tiller
-    release: NAMESPACE
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role

@@ -5,9 +5,6 @@ kind: ConfigMap
 metadata:
   labels:
     app: grafana
-    chart: grafana-4.0.2
-    release: NAMESPACE
-    heritage: Tiller
   name: NAMESPACE-grafana-config-dashboards
   namespace: NAMESPACE
 data:
