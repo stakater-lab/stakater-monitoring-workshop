@@ -42,7 +42,7 @@ spec:
           - name: PORT
             value: "4200"
           - name: SECURE_GW_ENDPOINT
-            value: https://gateway-dev.cp-stakater.com/
+            value: https://gateway-NAMESPACE.cp-stakater.com
           
         livenessProbe:
           failureThreshold: 3
