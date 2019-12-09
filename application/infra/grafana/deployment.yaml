@@ -3,26 +3,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: participant-3-grafana
-  namespace: participant-3
+  name: NAMESPACE-grafana
+  namespace: NAMESPACE
   labels:
     app: grafana
     chart: grafana-4.0.2
-    release: participant-3
+    release: NAMESPACE
     heritage: Tiller
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: grafana
-      release: participant-3
+      release: NAMESPACE
   strategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
         app: grafana
-        release: participant-3
+        release: NAMESPACE
       annotations:
         checksum/config: 8e62afb844c79e1c855f33558c2b92748db99ae3cfc8bff8126af79f8ae2a239
         checksum/dashboards-json-config: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
@@ -30,7 +30,7 @@ spec:
         checksum/secret: 1ae518ed379d8639390a6738a1467f7db5a93ce119bb94df48951d7ecdf6fab3
     spec:
       
-      serviceAccountName: participant-3-grafana
+      serviceAccountName: NAMESPACE-grafana
       securityContext: {}
         
       initContainers:
@@ -98,12 +98,12 @@ spec:
             - name: GF_SECURITY_ADMIN_USER
               valueFrom:
                 secretKeyRef:
-                  name: participant-3-grafana
+                  name: NAMESPACE-grafana
                   key: admin-user
             - name: GF_SECURITY_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: participant-3-grafana
+                  name: NAMESPACE-grafana
                   key: admin-password
           livenessProbe:
             failureThreshold: 10
@@ -126,13 +126,13 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: participant-3-grafana
+            name: NAMESPACE-grafana
         - name: storage
           emptyDir: {}
         - name: sc-dashboard-volume
           emptyDir: {}
         - name: sc-dashboard-provider
           configMap:
-            name: participant-3-grafana-config-dashboards
+            name: NAMESPACE-grafana-config-dashboards
         - name: sc-datasources-volume
           emptyDir: {}

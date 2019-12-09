@@ -2,12 +2,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: participant-3-grafana
-  namespace: participant-3
+  name: NAMESPACE-grafana
+  namespace: NAMESPACE
   labels:
     app: grafana
     chart: grafana-4.0.2
-    release: participant-3
+    release: NAMESPACE
     heritage: Tiller
 spec:
   type: ClusterIP
@@ -19,4 +19,4 @@ spec:
 
   selector:
     app: grafana
-    release: participant-3
+    release: NAMESPACE

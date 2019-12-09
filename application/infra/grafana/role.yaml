@@ -2,18 +2,18 @@
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
-  name: participant-3-grafana
-  namespace: participant-3
+  name: NAMESPACE-grafana
+  namespace: NAMESPACE
   labels:
     app: grafana
     chart: grafana-4.0.2
     heritage: Tiller
-    release: participant-3
+    release: NAMESPACE
 rules:
 - apiGroups:      ['extensions']
   resources:      ['podsecuritypolicies']
   verbs:          ['use']
-  resourceNames:  [participant-3-grafana]
+  resourceNames:  [NAMESPACE-grafana]
 - apiGroups: [""] # "" indicates the core API group
   resources: ["configmaps", "secrets"]
   verbs: ["get", "watch", "list"]

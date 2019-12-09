@@ -3,14 +3,14 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: participant-3-prometheus-opera-grafana-datasource
-  namespace: participant-3
+  name: NAMESPACE-prometheus-opera-grafana-datasource
+  namespace: NAMESPACE
   labels:
     grafana_datasource: "1"
     app: prometheus-operator-grafana
     
     chart: prometheus-operator-8.2.0
-    release: "participant-3"
+    release: "NAMESPACE"
     heritage: "Tiller"
 data:
   datasource.yaml: |-
@@ -18,6 +18,6 @@ data:
     datasources:
     - name: Prometheus
       type: prometheus
-      url: http://prometheus-participant-3.cp-stakater.com
+      url: http://prometheus-NAMESPACE.cp-stakater.com
       access: proxy
       isDefault: true

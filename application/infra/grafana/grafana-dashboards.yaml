@@ -6,10 +6,10 @@ metadata:
   labels:
     app: grafana
     chart: grafana-4.0.2
-    release: participant-3
+    release: NAMESPACE
     heritage: Tiller
-  name: participant-3-grafana-config-dashboards
-  namespace: participant-3
+  name: NAMESPACE-grafana-config-dashboards
+  namespace: NAMESPACE
 data:
   provider.yaml: |-
     apiVersion: 1
