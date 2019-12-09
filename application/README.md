@@ -553,101 +553,96 @@ Follow the guidelines given below to deploy the application:
 
     Each participant can check whether namespace is created or not using the command given below:
     ```bash
-    
+    oc get namespace
     ```
 
+    4.3. Apply the manifests given in `nordmart/` directory in the sequence given below:
+        
+        4.3.1 Create serviceaccount:
+        ```bash
+        oc apply -f serviceaccount.yaml -n <namespace>
+        ```
 
+        To check whether serviceaccount is created or not
+        ```bash
+        oc get serviceaccount -n <namespace>
+        ```
+        
+        4.3.2. Create role:
 
+        ```bash
+        oc apply -f role.yaml -n <namespace>
+        ``` 
 
+        To check whether role is created or not:
 
+        ```bash
+        oc get role -n <namespace>
+        ```
 
+        To get role manifest
+        ```bash
+        oc get role <role-name> -oyaml -n <namespace>
+        ```
 
+        4.3.3. Create rolebinding:
 
-1. Change value of `NAMESPACE` variable in `deploy-apps-monitoring.sh` file.
+        ```bash
+        oc apply -f rolebinding -n <namespace>
+        ```
 
-2. Use the command given below to deploy the application:
+        To check whether rolebinding is created or not:
 
-    ```bash
-    ./deploy-apps-monitoring.sh
-    ```
+        ```bash
+        oc get rolebinding -n <namespace>
+        ```
 
-    Above script performs following tasks:
+        4.3.4. Create mysql secret:
+        
+        ```bash
+        oc apply -f mysql-secret.yaml
+        ```
 
-    2.1. Replace namespace:
-    
-    ```bash
-    # Setup vars for individual namespaces
-    ./setup-vars.sh $NAMESPACE
-    ```
+        4.3.5. Deploy mysql using the manifest given below:
 
-    2.2. Create namespace:
-    
-    ```bash
-    # Create Namespace
-    oc apply -f namespace.yaml
-    ```
+        ```bash
+        oc apply -f mysql.yaml -n <namespace>
+        ```
 
-    2.3. Storage class creation:
-    
-    ```bash
-    # Create storage class 
-    oc apply -f storage-class.yaml
-    ```
+        4.3.6. Deploy mongodb using the manifest given below:
+        
+        ```bash
+        oc apply -f mongo.yaml -n <namepsace>
+        ```
 
-    2.4. Deploy monitoring services:
-    ```bash
-    # Deploy Monitoring
-    ## Deploy Prometheus Operator
-    oc apply -f infra/operator/.
+        4.3.7. Create catalog microservie monitoring manifests:
 
-    ## Deploy Prometheus
-    oc apply -f infra/prometheus/.
-    ```
+        ```bash
+        oc apply -f catalog-prometheus-rule.yaml -n <namespace>
+        ```
 
-    2.5. Deploy Nordmart microservices:
-    ```bash
-    # Deploy Nordmart Services
-    oc apply -f nordmart/.
-    ```
+        ```bash
+        oc apply -f catalog-service-dashboard.yaml -n <namespace>
+        ```
 
-3. Use the command given below to destroy services and namespaces:
-    ```bash
-    # Destroy Application monitroing services
-    ./destroy-apps-monitoring.sh
-    ```
-    
-    Above script performs following tasks:
+        ```bash
+        oc apply -f catalog-service-monitor.yaml -n <namespace>
+        ```
 
-    3.1. Delete the Nordmart application
+        4.3.8. Deploy Nordmart microservice:
+        
+        ```bash
+        oc apply -f inventory.yaml -n <namespace>
+        oc apply -f cart.yaml -n <namespace>
+        oc apply -f catalog.yaml -n <namespace>
+        oc apply -f gateway.yaml -n <namespace>
+        oc apply -f web.yaml -n <namespace>
+        oc apply -f review.yaml -n <namespace>
+        ```
 
-    ```bash
-    # Destroy Nordmart Services
-    oc delete -f nordmart/.
-    ```
+        4.3.9. Create the routes for web and gateway service:
 
-    3.2. Delete the prometheus:
-    
-    ```bash
-    ## Destroy Prometheus
-    oc delete -f infra/prometheus/.
-    ```
-
-    3.3. Delete prometheus operator:
-    
-    ```bash
-    ## Destroy Prometheus Operator
-    oc delete -f infra/operator/.
-    ```
-
-    3.4. Delete the storage class:
-    ```bash
-    ## Destroy storage class
-    oc apply -f storage-class.yaml
-    ```
-
-    3.5. Delete namespace:
-    ```bash
-    # Destroy namespace
-    oc delete -f namespace.yaml
-    ```
-
+        ```bash
+        oc apply -f route-gateway.yaml -n <namespace>
+        oc apply -f web-gateway.yaml -n <namespace>
+        ```
