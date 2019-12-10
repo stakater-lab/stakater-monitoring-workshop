@@ -5,10 +5,8 @@ metadata:
     openshift.io/display-name: ""
     # each person must use the nodeSelector value from options given below:
 
-    # infra1, 
-    # infra2, 
-    # node-databas1,
-    # node-verksamhet1
+    # node-role.kubernetes.io/infra=true, 
+    # node-role.kubernetes.io/compute=true,
 
-    openshift.io/node-selector: "infra1"
+    openshift.io/node-selector: "node-role.kubernetes.io/infra=true"
   name: NAMESPACE
