@@ -1,4 +1,3 @@
-
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
@@ -8,39 +7,6 @@ metadata:
     app: prometheus-NAMESPACE
     prometheus: prometheus-NAMESPACE
 spec:
-  secrets:
-  - prometheus-tls
-  - prometheus-htpasswd
-  containers:
-  - args:
-    - -provider=openshift
-    - -https-address=:9091
-    - -http-address=
-    - -email-domain=*
-    - -upstream=http://localhost:9090
-    - -openshift-service-account=prometheus-NAMESPACE
-    - '-openshift-sar={"resource": "namespaces", "verb": "get"}'
-    - '-openshift-delegate-urls={"/": {"resource": "namespaces", "verb": "get"}}'
-    - -tls-cert=/etc/tls/private/tls.crt
-    - -tls-key=/etc/tls/private/tls.key
-    - -client-secret-file=/var/run/secrets/kubernetes.io/serviceaccount/token
-    - -cookie-secret-file=/etc/proxy/secrets/session_secret
-    - -openshift-ca=/etc/pki/tls/cert.pem
-    - -openshift-ca=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-    - -skip-auth-regex=^/metrics
-    image: openshift/oauth-proxy:v1.1.0
-    name: prometheus-proxy
-    ports:
-    - containerPort: 9091
-      name: web
-    resources: {}
-    volumeMounts:
-    - mountPath: /etc/tls/private
-      name: secret-prometheus-tls
-    - mountPath: /etc/proxy/secrets
-      name: secret-prometheus-proxy
-    - mountPath: /etc/proxy/htpasswd
-      name: secret-prometheus-htpasswd
   resources:
     limit:
       memory: 100Mi

@@ -7,10 +7,9 @@ This document provides the guidelines to deploy Nordmart Application with its re
 ## Folder Structure Description
 
 ```bash
-
 ├── deploy-apps-monitoring.sh  # To create application monitoring services and nordmart application
 │
-├── destroy-apps-monitoring.sh # To delete application monitoring services and nordmart application 
+├── destroy-apps-monitoring.sh # To delete application monitoring services and nordmart application
 │
 │
 ├── infra  # It contains application monitoring infrastructure
@@ -26,58 +25,58 @@ This document provides the guidelines to deploy Nordmart Application with its re
 │   │
 │   └── prometheus  # It contains prometheus manifests
 │       ├── clusterrole.yaml
-|       ├── clusterrolebinding.yaml
-|       ├── prometheus-htpasswd.yaml
-|       ├── prometheus-proxy.yaml
-|       ├── prometheus-tls.yaml
-|       ├── prometheus.yaml
+│       ├── clusterrolebinding.yaml
+│       ├── prometheus-htpasswd.yaml
+│       ├── prometheus-proxy.yaml
+│       ├── prometheus-tls.yaml
+│       ├── prometheus.yaml
 │       ├── rolebinding.yaml
 │       ├── role.yaml
 │       ├── route.yaml
 │       ├── serviceaccount.yaml
-|       └── service.yaml
+│       └── service.yaml
 │      
 │
 ├── namespace.yaml  # It contains namespace manifest
 │
 │
 ├── nordmart  # It contains manifests for Nordmart Application
-|
-|   # Prometheus specific configuration
+│
+│   # Prometheus specific configuration
 │   ├── catalog-prometheus-rule.yaml
 │   ├── catalog-service-dashboard.yaml
 │   ├── catalog-service-monitor.yaml
-|
-|   # Application specific configuration
+│
+│   # Application specific configuration
 │   ├── rolebinding.yaml
 │   ├── role.yaml
 │   ├── serviceaccount.yaml
-|
-|   # Normart Application Microservice
+│
+│   # Normart Application Microservice
 │   ├── cart.yaml
 │   ├── catalog.yaml
 │   ├── gateway.yaml
 │   ├── inventory.yaml
 │   ├── web.yaml
 │   ├── review.yaml
-|
-|   # Database Manifests
+│
+│   # Database Manifests
 │   ├── mongo.yaml
 │   ├── mysql-secret.yaml
 │   ├── mysql.yaml
-|
-|   # Nordmart Application Microservices
+│
+│   # Nordmart Application Microservices
 │   ├── route-gateway.yaml
 │   └── route-web.yaml
 │
-|
-|   # Documentation
+│
+│   # Documentation
 ├── README.md
-|    
-|   # Bash Scripts to replace the NAMESPACE placeholder in all manifests with user specified value
+│    
+│   # Bash Scripts to replace the NAMESPACE placeholder in all manifests with user specified value
 ├── setup-vars.sh
-|
-|   # Storage Class manifest
+│
+│   # Storage Class manifest
 └── storage-class.yaml
 
 ```
@@ -92,8 +91,6 @@ Code snippet to replace `NAMESPACE` placeholder with `desired-value` in manifest
 ```bash
 sed -i 's/NAMESPACE/desired-value/g' *
 ```
-
-
 
 1. Replace the `NAMESPACE` placeholder with desired value in the `namespace.yaml` file, to create a new namespace using the command given below:
     
@@ -112,7 +109,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     2.2. Deploy Nordmart application microservice that exists in `nordmart/` directory.  
 
 
-4.2. Each participant will create a new namespace and will use that namespace in later manifests:
+3. Each participant will create a new namespace and will use that namespace in later manifests:
 
     ```bash
     oc apply -f namespace.yaml
@@ -123,11 +120,11 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get namespace
     ```
 
-3. Deploying Monitoring Infrastructure Services
+4. Deploying Monitoring Infrastructure Services
 
-    3.1 Deploy the Prometheus Operator using the manifests given in `/infra/operator/` directory. Follow the instructions one by one:
+    4.1 Deploy the Prometheus Operator using the manifests given in `/infra/operator/` directory. Follow the instructions one by one:
 
-    3.1.1. Create a service account:
+    4.1.1. Create a service account:
     
     ```bash
     oc apply -f serviceaccount.yaml
@@ -143,7 +140,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get serviceaccount <service-account-name> -oyaml -n <namespace>
     ```
 
-    3.1.2 Create clusterrole:
+    4.1.2 Create clusterrole:
 
     ```bash
     oc apply -f clusterrole.yaml
@@ -165,7 +162,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     MANIFEST
     ```
 
-    3.1.3. Create clusterolebinding:
+    4.1.3. Create clusterolebinding:
 
     ```bash
     oc apply -f clusterrolebinding.yaml
@@ -187,7 +184,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     MANIFEST
     ```
 
-    3.1.4. Deploy deployment:
+    4.1.4. Deploy deployment:
 
     ```bash
     oc apply -f deployment.yaml -n <namespace>
@@ -204,7 +201,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get pod <pod-name> -oyaml -n <namespace>
     ```
 
-    3.1.5. Create a service:
+    4.1.5. Create a service:
 
     ```bash
     oc apply -f service.yaml -n <namespace>
@@ -220,7 +217,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get service <service-name> -oyaml -n <namespace>
     ```
 
-    3.1.6. Create service monitor:
+    4.1.6. Create service monitor:
 
     ```bash
     oc apply -f servicemonitor.yaml -n <namespace>
@@ -234,9 +231,9 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get servicemonitor <servicemonitor-name> -oyaml -n <namespace>
     ```
 
-    3.2. Deploy prometheus using the manifests given in `/infra/prometheus/` directory. Follow the instructions one by one:
+    4.2. Deploy prometheus using the manifests given in `/infra/prometheus/` directory. Follow the instructions one by one:
     
-    3.2.1. Create serviceaccount:
+    4.2.1. Create serviceaccount:
 
     ```bash
     oc apply -f serviceaccount.yaml -n <namespace>
@@ -253,7 +250,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get serviceaccount <serviceaccount-name> -oyaml -n <namespace>
     ```
 
-    3.2.2 Create clusterrole:
+    4.2.2 Create clusterrole:
 
     ```bash
     oc apply -f clusterrole.yaml
@@ -275,7 +272,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     MANIFEST
     ```
 
-    3.2.3. Create clusterolebinding:
+    4.2.3. Create clusterolebinding:
 
     ```bash
     oc apply -f clusterrolebinding.yaml
@@ -297,7 +294,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     MANIFEST
     ```
 
-    3.2.4. Deploy prometheus:
+    4.2.4. Deploy prometheus:
 
     ```bash
     oc apply -f prometheus.yaml -n <namespace>
@@ -314,7 +311,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get pod <pod-name> -oyaml -n <namespace>
     ```
 
-    3.2.5. Create prometheus service:
+    4.2.5. Create prometheus service:
 
     ```bash
     oc apply -f service.yaml -n <namespace>
@@ -330,7 +327,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get service <service-name> -oyaml -n <namespace>
     ```
 
-    3.2.5. Create prometheus route:
+    4.2.5. Create prometheus route:
 
     ```bash
     oc apply -f route.yaml -n <namespace>
@@ -344,7 +341,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get route <route-name> -oyaml -n <namespace>
     ```
 
-    3.2.6. Create secrets required by prometheus:
+    4.2.6. Create secrets required by prometheus:
 
     ```bash
     oc apply -f prometheus-htpasswd.yaml -n <namespace>
@@ -363,23 +360,9 @@ sed -i 's/NAMESPACE/desired-value/g' *
     MANIFEST
 
 
+    4.3. Deploy grafana using the manifests given in `/infra/grafana/` directory. Follow the instructions one by one:
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    3.3. Deploy grafana using the manifests given in `/infra/grafana/` directory. Follow the instructions one by one:
-
-    3.3.1. Create serviceaccount:
+    4.3.1. Create serviceaccount:
 
     ```bash
     oc apply -f serviceaccount.yaml -n <namespace>
@@ -396,7 +379,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get serviceaccount <serviceaccount-name> -oyaml -n <namespace>
     ```
 
-    3.3.2 Create role:
+    4.3.2 Create role:
 
     ```bash
     oc apply -f role.yaml -n <namespace>
@@ -418,7 +401,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     MANIFEST
     ```
 
-    3.3.3. Create rolebinding:
+    4.3.3. Create rolebinding:
 
     ```bash
     oc apply -f rolebinding.yaml -n <namespace>
@@ -440,7 +423,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     MANIFEST
     ```
 
-    3.3.4. Create configmap:
+    4.3.4. Create configmap:
     
     ```bash
     oc apply -f configmap.yaml -n <namespace>
@@ -458,7 +441,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get configmap <configmap-name> -oyaml -n <namespace>
     ```
 
-    3.3.5. Create grafana datasource config:
+    4.3.5. Create grafana datasource config:
 
     ```bash
     oc apply -f datasources.yaml -n <namespace>
@@ -472,7 +455,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get configmap <configmap-name> -oyaml -n <namespace>
     ```
 
-    3.3.6. Create grafana dashboard config:
+    4.3.6. Create grafana dashboard config:
 
     ```bash
     oc apply -f grafana-dashboard.yaml -n <namespace>
@@ -486,7 +469,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get configmap <configmap-name> -oyaml -n <namespace>
     ```
     
-    3.3.7. Create grafana secret:
+    4.3.7. Create grafana secret:
 
     ```bash
     oc apply -f secret.yaml -n <namespace>
@@ -503,7 +486,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get secret <secret-name> -oyaml -n <namespace>
     ```
 
-    3.3.8. Create grafana deployment:
+    4.3.8. Create grafana deployment:
 
     ```bash
     oc apply -f deployment.yaml -n <namespace>
@@ -520,7 +503,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get pod <pod-name> -oyaml -n <namespace>
     ```
 
-    3.3.9. Create a service for grafana:
+    4.3.9. Create a service for grafana:
     ```bash
     oc apply -f service,yaml -n <namespace>
     ```
@@ -535,7 +518,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get service <service-name> -oyaml -n <namespace>
     ```
     
-    3.3.10. Create route for grafana service to make it publically accessible:
+    4.3.10. Create route for grafana service to make it publically accessible:
     ```bash
     oc apply -f route.yaml -n <namespace>
     ```
@@ -551,10 +534,11 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get route <route-name> -oyaml -n <namespace>
     ```
 
+5. Deploying Nordmart Application Microservices:
 
-4. Deploying Nordmart Application Microservices:
+    Details about Nordmart application can be found on this [link](https://playbook.stakater.com/content/workshop/nordmart-intro.html#introduction).
 
-    4.1. Create a storage class:
+    5.1. Create a storage class:
 
     ```bash
     oc apply -f storage-class.yaml
@@ -566,11 +550,10 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get storageclass
     ```
 
-    
 
-    4.3. Apply the manifests given in `nordmart/` directory in the sequence given below:
+    5.2. Apply the manifests given in `nordmart/` directory in the sequence given below:
         
-    4.3.1 Create serviceaccount:
+    5.2.1 Create serviceaccount:
     
     ```bash
     oc apply -f serviceaccount.yaml -n <namespace>
@@ -581,7 +564,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get serviceaccount -n <namespace>
     ```
     
-    4.3.2. Create role:
+    5.2.2. Create role:
 
     ```bash
     oc apply -f role.yaml -n <namespace>
@@ -598,10 +581,10 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get role <role-name> -oyaml -n <namespace>
     ```
 
-    4.3.3. Create rolebinding:
+    5.2.3. Create rolebinding:
 
     ```bash
-    oc apply -f rolebinding -n <namespace>
+    oc apply -f rolebinding.yaml -n <namespace>
     ```
 
     To check whether rolebinding is created or not:
@@ -610,25 +593,25 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get rolebinding -n <namespace>
     ```
 
-    4.3.4. Create mysql secret:
+    5.2.4. Create mysql secret:
     
     ```bash
     oc apply -f mysql-secret.yaml
     ```
 
-    4.3.5. Deploy mysql using the manifest given below:
+    5.2.5. Deploy mysql using the manifest given below:
 
     ```bash
     oc apply -f mysql.yaml -n <namespace>
     ```
 
-    4.3.6. Deploy mongodb using the manifest given below:
+    5.2.6. Deploy mongodb using the manifest given below:
     
     ```bash
     oc apply -f mongo.yaml -n <namepsace>
     ```
 
-    4.3.7. Create catalog microservie monitoring manifests:
+    5.2.7. Create catalog microservie monitoring manifests:
 
     ```bash
     oc apply -f catalog-prometheus-rule.yaml -n <namespace>
@@ -642,7 +625,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc apply -f catalog-service-monitor.yaml -n <namespace>
     ```
 
-    4.3.8. Deploy Nordmart microservice:
+    5.2.8. Deploy Nordmart microservice:
     
     ```bash
     oc apply -f inventory.yaml -n <namespace>
@@ -653,7 +636,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc apply -f review.yaml -n <namespace>
     ```
 
-    4.3.9. Create the routes for web and gateway service:
+    5.2.9. Create the routes for web and gateway service:
 
     ```bash
     oc apply -f route-gateway.yaml -n <namespace>
