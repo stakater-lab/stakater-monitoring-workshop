@@ -27,6 +27,9 @@ This document provides the guidelines to deploy Prometheus Forwarder that fetche
 Follow the guidelines given below to deploy InfluxDB:
 
 1. We will deploy our influxDB instance in a separate namespace called `storage`. To create this namespace run the following
+    ```bash
+    cd influx-db
+    ```
 
     ```bash
     oc apply -f namespace.yaml
@@ -120,6 +123,10 @@ Now the influxdb should be accessible to other services via name `influxdb.stora
 
 
 4. Now we will deploy prometheus that will scrape default prometheus and forward it to influxdb. Follow these steps to deploy `prometheus-forwarder` in the directory `prometheus-fwd/`
+
+    ```bash
+    cd prometheus-fwd
+    ```
 
    4.1 Create a Prometheus custom Resource instance:
     
@@ -225,7 +232,8 @@ show databases
 show measurements
 ```
 The measurement acts as a container for tags, fields, and the time column.
-6. Create `prometheus` database.
+
+6. Create `prometheus` database. (Already created by init-configmap while installing influx)
 7. To check whether measurements exists in `prometheus` or not:
 ```bash
 show databases

@@ -235,22 +235,6 @@ oc get alertmanagers main -n openshift-monitoring -o yaml
 Output:
 Check the output [here](manifests/alertmanagers-main-cr.yaml)
 
-### Add Custom Alert
-To Add custom Alert, modify the Prometheus-Rule.yaml and add below
-```yaml
-    - name: Custom-Alert
-      rules:
-        - alert: PrometheusReplicaDown
-          annotations:
-            message: Prometheus Replica Count is less than 1
-          expr: sum(up{namespace="openshift-monitoring",pod=~"prometheus-k8s.*"})<1
-          for: 15m
-          labels:
-            kind: infra
-            severity: critical
-```
-This will add a custom alert that would be triggered, when prometheus replica count becomes less than 1
-
 ## 7. Grafana
 
 Check the Grafana Dashboard [here](https://grafana-openshift-monitoring.cp-stakater.com).
