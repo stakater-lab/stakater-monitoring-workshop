@@ -649,3 +649,10 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc apply -f route-gateway.yaml -n <namespace>
     oc apply -f web-gateway.yaml -n <namespace>
     ```
+
+    5.2.10. Grafana can be accessed using the credentials given below:
+
+    ```
+    username: admin
+    password: stakater
+    ```
