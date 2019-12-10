@@ -14,6 +14,6 @@ data:
     datasources:
     - name: Prometheus
       type: prometheus
-      url: https://prometheus-NAMESPACE.NAMESPACE.cp-stakater.com
+      url: https://prometheus-NAMESPACE.cp-stakater.com
       access: Browser
       isDefault: true

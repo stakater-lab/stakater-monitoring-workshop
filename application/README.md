@@ -49,8 +49,8 @@ This document provides the guidelines to deploy Nordmart Application with its re
 │   ├── catalog-service-monitor.yaml
 |
 |   # Application specific configuration
-│   ├── clusterrolebinding.yaml
-│   ├── clusterrole.yaml
+│   ├── rolebinding.yaml
+│   ├── role.yaml
 │   ├── serviceaccount.yaml
 |
 |   # Normart Application Microservice
@@ -86,8 +86,17 @@ This document provides the guidelines to deploy Nordmart Application with its re
 
 Follow the guidelines given below to deploy the application:
 
-1. Replace the `NAMESPACE` placeholder with desired value in the `namespace.yaml` file, to create a new namespace using the command given below:
+###`CODE SNIPPET`
 
+Code snippet to replace `NAMESPACE` placeholder with `desired-value` in manifests.
+```bash
+sed -i 's/NAMESPACE/desired-value/g' *
+```
+
+
+
+1. Replace the `NAMESPACE` placeholder with desired value in the `namespace.yaml` file, to create a new namespace using the command given below:
+    
     ```bash
     oc apply -f namespace.yaml
     ```
@@ -101,6 +110,18 @@ Follow the guidelines given below to deploy the application:
 
     2.1. Deploy monitoring services that exists in `infra/` directory.
     2.2. Deploy Nordmart application microservice that exists in `nordmart/` directory.  
+
+
+4.2. Each participant will create a new namespace and will use that namespace in later manifests:
+
+    ```bash
+    oc apply -f namespace.yaml
+    ```
+
+    Each participant can check whether namespace is created or not using the command given below:
+    ```bash
+    oc get namespace
+    ```
 
 3. Deploying Monitoring Infrastructure Services
 
@@ -153,13 +174,13 @@ Follow the guidelines given below to deploy the application:
     To check whether clusterolebinding is created or not:
     
     ```bash
-    oc get clusterolebinding | grep <clusterolebinding-name>
+    oc get clusterrolebinding | grep <clusterolebinding-name>
     ```
     
     To get clusterolebinding manifest:
 
     ```bash
-    oc get clusterolebinding <clusterolebinding-name> -oyaml
+    oc get clusterrolebinding <clusterolebinding-name> -oyaml
     ```
 
     ```
@@ -214,7 +235,7 @@ Follow the guidelines given below to deploy the application:
     ```
 
     3.2. Deploy prometheus using the manifests given in `/infra/prometheus/` directory. Follow the instructions one by one:
-
+    
     3.2.1. Create serviceaccount:
 
     ```bash
@@ -241,7 +262,7 @@ Follow the guidelines given below to deploy the application:
     To check whether clusterrole is created or not:
     
     ```bash
-    oc get clusterorle | grep <clusterrole>
+    oc get clusterrole | grep <clusterrole>
     ```
 
     To get clusterrole manifest:
@@ -263,13 +284,13 @@ Follow the guidelines given below to deploy the application:
     To check whether clusterolebinding is created or not:
     
     ```bash
-    oc get clusterolebinding | grep <clusterolebinding-name>
+    oc get clusterrolebinding | grep <clusterrolebinding-name>
     ```
     
-    To get clusterolebinding manifest:
+    To get clusterrolebinding manifest:
 
     ```bash
-    oc get clusterolebinding <clusterolebinding-name> -oyaml
+    oc get clusterrolebinding <clusterrolebinding-name> -oyaml
     ```
 
     ```
@@ -284,7 +305,7 @@ Follow the guidelines given below to deploy the application:
     
     To check whether prometheus operator is deployed or not:
     ```bash
-    oc get pod -n <namespace> | grep <pod-name>
+    oc get pod -n <namespace>
     ```
     
     To get the manifest:
@@ -378,20 +399,20 @@ Follow the guidelines given below to deploy the application:
     3.3.2 Create role:
 
     ```bash
-    oc apply -f role.yaml
+    oc apply -f role.yaml -n <namespace>
     ```
 
     To check whether role is created or not:
     
     ```bash
-    oc get role | grep <role>
+    oc get role -n <namespace> | grep <role>
     ```
 
     To get role manifest:
 
     ```bash
-    oc get role <role> -oyaml
-    ```
+    oc get role <role> -oyaml -n <namespace>
+    ``` 
     
     ```
     MANIFEST
@@ -400,19 +421,19 @@ Follow the guidelines given below to deploy the application:
     3.3.3. Create rolebinding:
 
     ```bash
-    oc apply -f rolebinding.yaml
+    oc apply -f rolebinding.yaml -n <namespace>
     ```
 
     To check whether rolebinding is created or not:
     
     ```bash
-    oc get rolebinding | grep <rolebinding-name>
+    oc get rolebinding -n <namespace>| grep <rolebinding-name>
     ```
     
     To get rolebinding manifest:
 
     ```bash
-    oc get rolebinding <rolebinding-name> -oyaml
+    oc get rolebinding <rolebinding-name> -oyaml -n <namespace>
     ```
 
     ```
@@ -422,7 +443,7 @@ Follow the guidelines given below to deploy the application:
     3.3.4. Create configmap:
     
     ```bash
-    oc apply -f configmap
+    oc apply -f configmap.yaml -n <namespace>
     ```
     
     To check whether configmap is created or not:
@@ -444,7 +465,7 @@ Follow the guidelines given below to deploy the application:
     ```
 
     ```bash
-    oc get configmap -n <namespace> 
+    oc get configmap -n <namespace> | grep <configmap-name>
     ```
 
     ```bash
@@ -473,7 +494,7 @@ Follow the guidelines given below to deploy the application:
 
     To check whether secret is created or not:
     ```bash
-    oc get secret -n <namespace> 
+    oc get secret -n <namespace>
     ```
 
     To get secret manifest:
@@ -491,7 +512,7 @@ Follow the guidelines given below to deploy the application:
     To check whether grafana has been deployed or not:
 
     ```bash
-    oc get pod <pod-name> -n namespace.yaml
+    oc get pod -n <namespace>
     ```
 
     To get the deployment manifest
@@ -527,7 +548,7 @@ Follow the guidelines given below to deploy the application:
     To get the route manifest:
 
     ```bash
-    oc get route <route-name> -n <namespace>
+    oc get route <route-name> -oyaml -n <namespace>
     ```
 
 
@@ -541,108 +562,100 @@ Follow the guidelines given below to deploy the application:
 
     To check storage class is created
 
-    ```
+    ```bash
     oc get storageclass
     ```
 
-    4.2. Each participant will create a new namespace and will use that namespace in later manifests:
-
-    ```bash
-    oc apply -f namespace.yaml
-    ```
-
-    Each participant can check whether namespace is created or not using the command given below:
-    ```bash
-    oc get namespace
-    ```
+    
 
     4.3. Apply the manifests given in `nordmart/` directory in the sequence given below:
         
-        4.3.1 Create serviceaccount:
-        ```bash
-        oc apply -f serviceaccount.yaml -n <namespace>
-        ```
+    4.3.1 Create serviceaccount:
+    
+    ```bash
+    oc apply -f serviceaccount.yaml -n <namespace>
+    ```
 
-        To check whether serviceaccount is created or not
-        ```bash
-        oc get serviceaccount -n <namespace>
-        ```
-        
-        4.3.2. Create role:
+    To check whether serviceaccount is created or not
+    ```bash
+    oc get serviceaccount -n <namespace>
+    ```
+    
+    4.3.2. Create role:
 
-        ```bash
-        oc apply -f role.yaml -n <namespace>
-        ``` 
+    ```bash
+    oc apply -f role.yaml -n <namespace>
+    ``` 
 
-        To check whether role is created or not:
+    To check whether role is created or not:
 
-        ```bash
-        oc get role -n <namespace>
-        ```
+    ```bash
+    oc get role -n <namespace>
+    ```
 
-        To get role manifest
-        ```bash
-        oc get role <role-name> -oyaml -n <namespace>
-        ```
+    To get role manifest
+    ```bash
+    oc get role <role-name> -oyaml -n <namespace>
+    ```
 
-        4.3.3. Create rolebinding:
+    4.3.3. Create rolebinding:
 
-        ```bash
-        oc apply -f rolebinding -n <namespace>
-        ```
+    ```bash
+    oc apply -f rolebinding -n <namespace>
+    ```
 
-        To check whether rolebinding is created or not:
+    To check whether rolebinding is created or not:
 
-        ```bash
-        oc get rolebinding -n <namespace>
-        ```
+    ```bash
+    oc get rolebinding -n <namespace>
+    ```
 
-        4.3.4. Create mysql secret:
-        
-        ```bash
-        oc apply -f mysql-secret.yaml
-        ```
+    4.3.4. Create mysql secret:
+    
+    ```bash
+    oc apply -f mysql-secret.yaml
+    ```
 
-        4.3.5. Deploy mysql using the manifest given below:
+    4.3.5. Deploy mysql using the manifest given below:
 
-        ```bash
-        oc apply -f mysql.yaml -n <namespace>
-        ```
+    ```bash
+    oc apply -f mysql.yaml -n <namespace>
+    ```
 
-        4.3.6. Deploy mongodb using the manifest given below:
-        
-        ```bash
-        oc apply -f mongo.yaml -n <namepsace>
-        ```
+    4.3.6. Deploy mongodb using the manifest given below:
+    
+    ```bash
+    oc apply -f mongo.yaml -n <namepsace>
+    ```
 
-        4.3.7. Create catalog microservie monitoring manifests:
+    4.3.7. Create catalog microservie monitoring manifests:
 
-        ```bash
-        oc apply -f catalog-prometheus-rule.yaml -n <namespace>
-        ```
+    ```bash
+    oc apply -f catalog-prometheus-rule.yaml -n <namespace>
+    ```
 
-        ```bash
-        oc apply -f catalog-service-dashboard.yaml -n <namespace>
-        ```
+    ```bash
+    oc apply -f catalog-service-dashboard.yaml -n <namespace>
+    ```
 
-        ```bash
-        oc apply -f catalog-service-monitor.yaml -n <namespace>
-        ```
+    ```bash
+    oc apply -f catalog-service-monitor.yaml -n <namespace>
+    ```
 
-        4.3.8. Deploy Nordmart microservice:
-        
-        ```bash
-        oc apply -f inventory.yaml -n <namespace>
-        oc apply -f cart.yaml -n <namespace>
-        oc apply -f catalog.yaml -n <namespace>
-        oc apply -f gateway.yaml -n <namespace>
-        oc apply -f web.yaml -n <namespace>
-        oc apply -f review.yaml -n <namespace>
-        ```
+    4.3.8. Deploy Nordmart microservice:
+    
+    ```bash
+    oc apply -f inventory.yaml -n <namespace>
+    oc apply -f cart.yaml -n <namespace>
+    oc apply -f catalog.yaml -n <namespace>
+    oc apply -f gateway.yaml -n <namespace>
+    oc apply -f web.yaml -n <namespace>
+    oc apply -f review.yaml -n <namespace>
+    ```
 
-        4.3.9. Create the routes for web and gateway service:
+    4.3.9. Create the routes for web and gateway service:
 
-        ```bash
-        oc apply -f route-gateway.yaml -n <namespace>
-        oc apply -f web-gateway.yaml -n <namespace>
-        ```
+    ```bash
+    oc apply -f route-gateway.yaml -n <namespace>
+    oc apply -f web-gateway.yaml -n <namespace>
+    ```

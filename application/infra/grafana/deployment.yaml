@@ -109,14 +109,12 @@ spec:
             timeoutSeconds: 30
             
           readinessProbe:
+            failureThreshold: 10
             httpGet:
               path: /api/health
               port: 3000
-            
-          resources:
-            limits:
-              cpu: 0.3m
-              memory: 300Mi
+            initialDelaySeconds: 60
+            timeoutSeconds: 30
             
       volumes:
         - name: config

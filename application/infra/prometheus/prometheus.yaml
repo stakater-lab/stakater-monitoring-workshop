@@ -10,7 +10,6 @@ metadata:
 spec:
   secrets:
   - prometheus-tls
-  - prometheus-proxy
   - prometheus-htpasswd
   containers:
   - args:
