@@ -1,0 +1,44 @@
+---
+# Source: prometheus-operator/templates/prometheus-operator/deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stakater-operator
+  namespace: NAMESPACE
+  labels:
+    app: stakater-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stakater-operator
+  template:
+    metadata:
+      labels:
+        app: stakater-operator
+    spec:
+      containers:
+        - name: stakater
+          image: "quay.io/coreos/prometheus-operator:v0.32.0"
+          imagePullPolicy: "IfNotPresent"
+          args:
+            - --logtostderr=true
+            - --crd-apigroup=monitoring.coreos.com
+            - --localhost=127.0.0.1
+            - --namespaces=NAMESPACE
+            - --prometheus-config-reloader=quay.io/coreos/prometheus-config-reloader:v0.32.0
+            - --config-reloader-image=quay.io/coreos/configmap-reload:v0.0.1
+          ports:
+            - containerPort: 8080
+              name: http
+          resources:
+            limits:
+              memory: 100Mi
+              cpu: 0.3m
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+      securityContext: {}
+        
+      serviceAccountName: stakater-monitoring

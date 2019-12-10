@@ -1,0 +1,22 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: route-web
+  namespace: NAMESPACE
+spec:
+  host: web-NAMESPACE.cp-stakater.com
+  port:
+    targetPort: web
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: web
+    weight: 100
+  wildcardPolicy: None
+status:
+  ingress:
+    - host: web-NAMESPACE.cp-stakater.com
+      routerName: router
+      wildcardPolicy: None

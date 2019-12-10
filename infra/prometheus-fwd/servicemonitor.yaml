@@ -1,0 +1,28 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    prometheus: prometheus-forwarder
+  name: prometheus-forwarder
+  namespace: openshift-monitoring
+spec:
+  endpoints:
+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    honor_labels: true
+    interval: 30s
+    params:
+      match[]:
+      - '{__name__=~"job:.*"}'
+    path: /federate
+    scheme: https
+    port: web
+    tlsConfig:
+      insecureSkipVerify: true
+  namespaceSelector:
+    matchNames:
+    - openshift-monitoring
+  selector:
+    matchLabels:
+      # operated-prometheus: 'true'
+      app: prometheus
+      prometheus: prometheus-k8s2

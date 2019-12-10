@@ -1,0 +1,62 @@
+---
+# Source: influxdb/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: "influxdb"
+  namespace: "storage"
+  labels:
+    app: "influxdb"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdb
+  serviceName: "influxdb"
+  template:
+    metadata:
+      labels:
+        app: influxdb
+        release: "influxdb"
+    spec:
+      containers:
+      - name: influxdb
+        image: "influxdb:1.7.6-alpine"
+        imagePullPolicy: "IfNotPresent"
+        resources:
+          {}
+          
+        ports:
+        - name: api
+          containerPort: 8086
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: api
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: api
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        volumeMounts:
+        - name: influxdb-data
+          mountPath: /var/lib/influxdb
+        - name: config
+          mountPath: /etc/influxdb
+      volumes:
+      - name: config
+        configMap:
+          name: influxdb
+  volumeClaimTemplates:
+    - metadata:
+        name: influxdb-data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "12Gi"
+        storageClassName: "hdd-file"

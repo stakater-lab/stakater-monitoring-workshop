@@ -1,0 +1,65 @@
+---
+# Source: application/templates/service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: NAMESPACE
+  labels:
+    app: review
+  name: review
+spec:
+  selector:
+    app: review  
+  ports:
+    - name: https
+      port: 8080
+      targetPort: 8080
+    
+---
+# Source: application/templates/deployment.yaml
+
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  namespace: NAMESPACE
+  labels:
+    app: review
+  name: review
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: review
+    spec:
+      containers:
+      - name: review
+        image: "stakater/stakater-nordmart-review:v0.0.1"
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: DB_NAME
+            value: nordmartDB
+          - name: MONGO_HOST
+            value: mongodb-svc.NAMESPACE.svc
+          
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 1
+
+      serviceAccountName: default

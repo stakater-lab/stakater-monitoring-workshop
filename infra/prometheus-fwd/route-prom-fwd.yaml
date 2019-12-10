@@ -1,0 +1,24 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    prometheus: prometheus-prometheus-forwarder
+  name: prometheus-forwarder
+  namespace: openshift-monitoring
+spec:
+  host: prometheus-forwarder.cp-stakater.com
+  port:
+    targetPort: web
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: prometheus-forwarder
+    weight: 100
+  wildcardPolicy: None
+status:
+  ingress:
+    - host: prometheus-forwarder.cp-stakater.com
+      routerName: router
+      wildcardPolicy: None

@@ -1,0 +1,264 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    openshift.io/scc: restricted
+  creationTimestamp: "2019-12-06T07:53:17Z"
+  generateName: alertmanager-main-
+  labels:
+    alertmanager: main
+    app: alertmanager
+    controller-revision-hash: alertmanager-main-7bf6ff47f4
+    statefulset.kubernetes.io/pod-name: alertmanager-main-0
+  name: alertmanager-main-0
+  namespace: openshift-monitoring
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: StatefulSet
+    name: alertmanager-main
+    uid: 76c27bac-17fd-11ea-a063-000d3aa92502
+  resourceVersion: "37083"
+  selfLink: /api/v1/namespaces/openshift-monitoring/pods/alertmanager-main-0
+  uid: 76ef8f8c-17fd-11ea-a063-000d3aa92502
+spec:
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: alertmanager
+              operator: In
+              values:
+              - main
+          namespaces:
+          - openshift-monitoring
+          topologyKey: kubernetes.io/hostname
+        weight: 100
+  containers:
+  - args:
+    - --config.file=/etc/alertmanager/config/alertmanager.yaml
+    - --cluster.listen-address=$(POD_IP):6783
+    - --storage.path=/alertmanager
+    - --data.retention=120h
+    - --web.listen-address=127.0.0.1:9093
+    - --web.external-url=https://alertmanager-main-openshift-monitoring.cp-stakater.com/
+    - --web.route-prefix=/
+    - --cluster.peer=alertmanager-main-0.alertmanager-operated.openshift-monitoring.svc:6783
+    - --cluster.peer=alertmanager-main-1.alertmanager-operated.openshift-monitoring.svc:6783
+    - --cluster.peer=alertmanager-main-2.alertmanager-operated.openshift-monitoring.svc:6783
+    env:
+    - name: POD_IP
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: status.podIP
+    image: openshift/prometheus-alertmanager:v0.15.2
+    imagePullPolicy: IfNotPresent
+    name: alertmanager
+    ports:
+    - containerPort: 6783
+      name: mesh
+      protocol: TCP
+    resources:
+      requests:
+        memory: 200Mi
+    securityContext:
+      capabilities:
+        drop:
+        - KILL
+        - MKNOD
+        - SETGID
+        - SETUID
+      runAsUser: 1000140000
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /etc/alertmanager/config
+      name: config-volume
+    - mountPath: /alertmanager
+      name: alertmanager-main-db
+      subPath: alertmanager-db
+    - mountPath: /etc/alertmanager/secrets/alertmanager-main-tls
+      name: secret-alertmanager-main-tls
+      readOnly: true
+    - mountPath: /etc/alertmanager/secrets/alertmanager-main-proxy
+      name: secret-alertmanager-main-proxy
+      readOnly: true
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: alertmanager-main-token-b8mhr
+      readOnly: true
+  - args:
+    - -webhook-url=http://localhost:9093/-/reload
+    - -volume-dir=/etc/alertmanager/config
+    image: quay.io/coreos/configmap-reload:v0.0.1
+    imagePullPolicy: IfNotPresent
+    name: config-reloader
+    resources:
+      limits:
+        cpu: 5m
+        memory: 10Mi
+      requests:
+        cpu: 5m
+        memory: 10Mi
+    securityContext:
+      capabilities:
+        drop:
+        - KILL
+        - MKNOD
+        - SETGID
+        - SETUID
+      runAsUser: 1000140000
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /etc/alertmanager/config
+      name: config-volume
+      readOnly: true
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: alertmanager-main-token-b8mhr
+      readOnly: true
+  - args:
+    - -provider=openshift
+    - -https-address=:9094
+    - -http-address=
+    - -email-domain=*
+    - -upstream=http://localhost:9093
+    - '-openshift-sar={"resource": "namespaces", "verb": "get"}'
+    - '-openshift-delegate-urls={"/": {"resource": "namespaces", "verb": "get"}}'
+    - -tls-cert=/etc/tls/private/tls.crt
+    - -tls-key=/etc/tls/private/tls.key
+    - -client-secret-file=/var/run/secrets/kubernetes.io/serviceaccount/token
+    - -cookie-secret-file=/etc/proxy/secrets/session_secret
+    - -openshift-service-account=alertmanager-main
+    - -openshift-ca=/etc/pki/tls/cert.pem
+    - -openshift-ca=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    - -skip-auth-regex=^/metrics
+    env:
+    - name: HTTP_PROXY
+    - name: HTTPS_PROXY
+    - name: NO_PROXY
+    image: openshift/oauth-proxy:v1.1.0
+    imagePullPolicy: IfNotPresent
+    name: alertmanager-proxy
+    ports:
+    - containerPort: 9094
+      name: web
+      protocol: TCP
+    resources: {}
+    securityContext:
+      capabilities:
+        drop:
+        - KILL
+        - MKNOD
+        - SETGID
+        - SETUID
+      runAsUser: 1000140000
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /etc/tls/private
+      name: secret-alertmanager-main-tls
+    - mountPath: /etc/proxy/secrets
+      name: secret-alertmanager-main-proxy
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: alertmanager-main-token-b8mhr
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  hostname: alertmanager-main-0
+  imagePullSecrets:
+  - name: alertmanager-main-dockercfg-f74b8
+  nodeName: infra1
+  nodeSelector:
+    node-role.kubernetes.io/infra: "true"
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext:
+    fsGroup: 1000140000
+    seLinuxOptions:
+      level: s0:c12,c4
+  serviceAccount: alertmanager-main
+  serviceAccountName: alertmanager-main
+  subdomain: alertmanager-operated
+  terminationGracePeriodSeconds: 0
+  tolerations:
+  - effect: NoSchedule
+    key: node.kubernetes.io/memory-pressure
+    operator: Exists
+  volumes:
+  - name: alertmanager-main-db
+    persistentVolumeClaim:
+      claimName: alertmanager-main-db-alertmanager-main-0
+  - name: config-volume
+    secret:
+      defaultMode: 420
+      secretName: alertmanager-main
+  - name: secret-alertmanager-main-tls
+    secret:
+      defaultMode: 420
+      secretName: alertmanager-main-tls
+  - name: secret-alertmanager-main-proxy
+    secret:
+      defaultMode: 420
+      secretName: alertmanager-main-proxy
+  - name: alertmanager-main-token-b8mhr
+    secret:
+      defaultMode: 420
+      secretName: alertmanager-main-token-b8mhr
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2019-12-06T07:53:18Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2019-12-06T07:53:33Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: null
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2019-12-06T07:53:18Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: docker://e0de25b83920187e5f4b2bd31651203bb950ba50afecf259f00b227a3881a625
+    image: docker.io/openshift/prometheus-alertmanager:v0.15.2
+    imageID: docker-pullable://docker.io/openshift/prometheus-alertmanager@sha256:2f87cf1296f5bb411ea0eb677df3f5dda97066c5857dd76a153ad97c448f5e92
+    lastState: {}
+    name: alertmanager
+    ready: true
+    restartCount: 0
+    state:
+      running:
+        startedAt: "2019-12-06T07:53:29Z"
+  - containerID: docker://25240cff94a2fa7f628a61edd64182089294c88589569b7c147f5c85370a5c23
+    image: docker.io/openshift/oauth-proxy:v1.1.0
+    imageID: docker-pullable://docker.io/openshift/oauth-proxy@sha256:731c1fdad1de4bf68ae9eece5e99519f063fd8d9990da312082b4c995c4e4e33
+    lastState: {}
+    name: alertmanager-proxy
+    ready: true
+    restartCount: 0
+    state:
+      running:
+        startedAt: "2019-12-06T07:53:32Z"
+  - containerID: docker://d92f3c2fdcc78164ab7d4bee5732601d2aeaa3d4dc8e94691eda3f8a578f4362
+    image: quay.io/coreos/configmap-reload:v0.0.1
+    imageID: docker-pullable://quay.io/coreos/configmap-reload@sha256:e2fd60ff0ae4500a75b80ebaa30e0e7deba9ad107833e8ca53f0047c42c5a057
+    lastState: {}
+    name: config-reloader
+    ready: true
+    restartCount: 0
+    state:
+      running:
+        startedAt: "2019-12-06T07:53:32Z"
+  hostIP: 10.0.2.5
+  phase: Running
+  podIP: 10.131.0.9
+  qosClass: Burstable
+  startTime: "2019-12-06T07:53:18Z"

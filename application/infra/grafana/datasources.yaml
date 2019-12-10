@@ -1,0 +1,19 @@
+# Source: prometheus-operator/templates/grafana/configmaps-datasources.yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: NAMESPACE-prometheus-opera-grafana-datasource
+  namespace: NAMESPACE
+  labels:
+    grafana_datasource: "1"
+    app: grafana
+data:
+  datasource.yaml: |-
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: https://prometheus-NAMESPACE.cp-stakater.com
+      access: Browser
+      isDefault: true

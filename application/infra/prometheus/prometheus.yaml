@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: prometheus-NAMESPACE
+  namespace: NAMESPACE
+  labels:
+    app: prometheus-NAMESPACE
+    prometheus: prometheus-NAMESPACE
+spec:
+  resources:
+    limit:
+      memory: 100Mi
+      cpu: 0.3
+  retention: 300h
+  serviceAccountName: prometheus-NAMESPACE
+  serviceMonitorSelector:
+    matchLabels:
+      prometheus: prometheus-NAMESPACE
+  nodeSelector:
+    node-role.kubernetes.io/infra: "true"
+  securityContext: {}

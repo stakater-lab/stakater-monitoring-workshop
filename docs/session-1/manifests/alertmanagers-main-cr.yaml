@@ -1,0 +1,82 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Alertmanager
+metadata:
+  creationTimestamp: "2019-12-06T07:53:17Z"
+  generation: 1
+  labels:
+    alertmanager: main
+  name: main
+  namespace: openshift-monitoring
+  resourceVersion: "37017"
+  selfLink: /apis/monitoring.coreos.com/v1/namespaces/openshift-monitoring/alertmanagers/main
+  uid: 7697ee21-17fd-11ea-a063-000d3aa92502
+spec:
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: alertmanager
+              operator: In
+              values:
+              - main
+          namespaces:
+          - openshift-monitoring
+          topologyKey: kubernetes.io/hostname
+        weight: 100
+  baseImage: openshift/prometheus-alertmanager
+  containers:
+  - args:
+    - -provider=openshift
+    - -https-address=:9094
+    - -http-address=
+    - -email-domain=*
+    - -upstream=http://localhost:9093
+    - '-openshift-sar={"resource": "namespaces", "verb": "get"}'
+    - '-openshift-delegate-urls={"/": {"resource": "namespaces", "verb": "get"}}'
+    - -tls-cert=/etc/tls/private/tls.crt
+    - -tls-key=/etc/tls/private/tls.key
+    - -client-secret-file=/var/run/secrets/kubernetes.io/serviceaccount/token
+    - -cookie-secret-file=/etc/proxy/secrets/session_secret
+    - -openshift-service-account=alertmanager-main
+    - -openshift-ca=/etc/pki/tls/cert.pem
+    - -openshift-ca=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    - -skip-auth-regex=^/metrics
+    env:
+    - name: HTTP_PROXY
+    - name: HTTPS_PROXY
+    - name: NO_PROXY
+    image: openshift/oauth-proxy:v1.1.0
+    name: alertmanager-proxy
+    ports:
+    - containerPort: 9094
+      name: web
+    resources: {}
+    volumeMounts:
+    - mountPath: /etc/tls/private
+      name: secret-alertmanager-main-tls
+    - mountPath: /etc/proxy/secrets
+      name: secret-alertmanager-main-proxy
+  externalUrl: https://alertmanager-main-openshift-monitoring.cp-stakater.com/
+  listenLocal: true
+  nodeSelector:
+    node-role.kubernetes.io/infra: "true"
+  replicas: 3
+  resources: {}
+  secrets:
+  - alertmanager-main-tls
+  - alertmanager-main-proxy
+  securityContext: {}
+  serviceAccountName: alertmanager-main
+  storage:
+    resources: {}
+    volumeClaimTemplate:
+      metadata: {}
+      spec:
+        resources:
+          requests:
+            storage: 2Gi
+        storageClassName: hdd-file
+      status: {}
+  version: v0.15.2

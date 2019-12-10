@@ -1,0 +1,22 @@
+apiVersion: authorization.openshift.io/v1
+kind: Role
+metadata:
+  creationTimestamp: "2019-12-06T07:51:52Z"
+  name: prometheus-k8s
+  namespace: default
+  resourceVersion: "36634"
+  selfLink: /apis/authorization.openshift.io/v1/namespaces/default/roles/prometheus-k8s
+  uid: 44583b5b-17fd-11ea-a063-000d3aa92502
+rules:
+- apiGroups:
+  - ""
+  attributeRestrictions: null
+  resources:
+  - endpoints
+  - nodes
+  - pods
+  - services
+  verbs:
+  - get
+  - list
+  - watch
