@@ -85,7 +85,7 @@ This document provides the guidelines to deploy Nordmart Application with its re
 
 Follow the guidelines given below to deploy the application:
 
-###`CODE SNIPPET`
+### `CODE SNIPPET`
 
 Code snippet to replace `NAMESPACE` placeholder with `desired-value` in manifests.
 ```bash
@@ -106,6 +106,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
 2. Once namespace is created, we will perform following operations: 
 
     2.1. Deploy monitoring services that exists in `infra/` directory.
+
     2.2. Deploy Nordmart application microservice that exists in `nordmart/` directory.  
 
 
@@ -562,6 +563,12 @@ sed -i 's/NAMESPACE/desired-value/g' *
     To check whether serviceaccount is created or not
     ```bash
     oc get serviceaccount -n <namespace>
+    ```
+
+    Once service account is created we will add a scc to that service account so that it can access node file system:
+    
+    ```bash
+    oc adm policy add-scc-to-user -z sa anyuid -n <namespace>
     ```
     
     5.2.2. Create role:
