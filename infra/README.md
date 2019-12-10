@@ -181,13 +181,13 @@ Now the influxdb should be accessible to other services via name `influxdb.stora
     ```bash
     oc apply -f route-prom-fwd.yaml
     ```
-    To check whether the service is created or not:
+    To check whether the route is created or not:
 
     ```bash
     oc get route -n openshift-monitoring | grep prometheus-forwarder
     ```
     
-    To get the manifest of the service:
+    To get the manifest of the route:
     ```bash
     oc get route prometheus-forwarder -o yaml -n openshift-monitoring
     ```
@@ -196,13 +196,13 @@ Now the influxdb should be accessible to other services via name `influxdb.stora
     ```bash
     oc apply -f servicemonitor.yaml
     ```
-    To check whether the service is created or not:
+    To check whether the service monitor is created or not:
 
     ```bash
     oc get servicemonitor -n openshift-monitoring | grep prometheus-forwarder
     ```
     
-    To get the manifest of the service:
+    To get the manifest of the service monitor:
     ```bash
     oc get servicemonitor prometheus-forwarder -o yaml -n openshift-monitoring
     ```
