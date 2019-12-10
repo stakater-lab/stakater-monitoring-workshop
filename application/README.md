@@ -557,7 +557,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     5.2.1 Create serviceaccount:
     
     ```bash
-    oc apply -f serviceaccount.yaml -n <namespace>
+    oc apply -f catalog-serviceaccount.yaml -n <namespace>
     ```
 
     To check whether serviceaccount is created or not
@@ -568,13 +568,13 @@ sed -i 's/NAMESPACE/desired-value/g' *
     Once service account is created we will add a scc to that service account so that it can access node file system:
     
     ```bash
-    oc adm policy add-scc-to-user -z sa anyuid -n <namespace>
+    oc adm policy add-scc-to-user -z catalog-serviceaccount anyuid -n <namespace>
     ```
     
     5.2.2. Create role:
 
     ```bash
-    oc apply -f role.yaml -n <namespace>
+    oc apply -f catalog-role.yaml -n <namespace>
     ``` 
 
     To check whether role is created or not:
@@ -591,7 +591,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     5.2.3. Create rolebinding:
 
     ```bash
-    oc apply -f rolebinding.yaml -n <namespace>
+    oc apply -f catalog-rolebinding.yaml -n <namespace>
     ```
 
     To check whether rolebinding is created or not:
