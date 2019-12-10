@@ -69,7 +69,7 @@ Follow the guidelines given below to deploy InfluxDB:
     3.2 Create configmap for influxdb.
 
     ```bash
-    oc apply -f configmap.yaml
+    oc apply -f config.yaml
     ```
 
     To check whether configmap is created or not:
@@ -93,13 +93,13 @@ Follow the guidelines given below to deploy InfluxDB:
     To check whether statefulset is created or not:
     
     ```bash
-    oc get statefulset | grep influxdb
+    oc get statefulset -n storage | grep influxdb
     ```
 
     To get statefulset manifest:
 
     ```bash
-    oc get statefulset influxdb -o yaml
+    oc get statefulset influxdb -o yaml -n storage
     ```
 
     3.4 Create service for influxdb.
@@ -125,7 +125,7 @@ Now the influxdb should be accessible to other services via name `influxdb.stora
 4. Now we will deploy prometheus that will scrape default prometheus and forward it to influxdb. Follow these steps to deploy `prometheus-forwarder` in the directory `prometheus-fwd/`
 
     ```bash
-    cd prometheus-fwd
+    cd ../prometheus-fwd
     ```
 
    4.1 Create a Prometheus custom Resource instance:
@@ -179,7 +179,7 @@ Now the influxdb should be accessible to other services via name `influxdb.stora
    4.4 Create a route:
     
     ```bash
-    oc apply -f service-route.yaml
+    oc apply -f route-prom-fwd.yaml
     ```
     To check whether the service is created or not:
 
