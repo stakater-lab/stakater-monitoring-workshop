@@ -158,10 +158,6 @@ sed -i 's/NAMESPACE/desired-value/g' *
     ```bash
     oc get clusterrole <clusterrole> -oyaml
     ```
-    
-    ```
-    MANIFEST
-    ```
 
     4.1.3. Create clusterolebinding:
 
@@ -179,10 +175,6 @@ sed -i 's/NAMESPACE/desired-value/g' *
 
     ```bash
     oc get clusterrolebinding <clusterolebinding-name> -oyaml
-    ```
-
-    ```
-    MANIFEST
     ```
 
     4.1.4. Deploy deployment:
@@ -268,10 +260,6 @@ sed -i 's/NAMESPACE/desired-value/g' *
     ```bash
     oc get clusterrole <clusterrole> -oyaml
     ```
-    
-    ```
-    MANIFEST
-    ```
 
     4.2.3. Create clusterolebinding:
 
@@ -289,10 +277,6 @@ sed -i 's/NAMESPACE/desired-value/g' *
 
     ```bash
     oc get clusterrolebinding <clusterrolebinding-name> -oyaml
-    ```
-
-    ```
-    MANIFEST
     ```
 
     4.2.4. Deploy prometheus:
@@ -358,9 +342,6 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get secret -n <namespace>
     ```
 
-    MANIFEST
-
-
     4.3. Deploy grafana using the manifests given in `/infra/grafana/` directory. Follow the instructions one by one:
 
     4.3.1. Create serviceaccount:
@@ -397,10 +378,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     ```bash
     oc get role <role> -oyaml -n <namespace>
     ``` 
-    
-    ```
-    MANIFEST
-    ```
+
 
     4.3.3. Create rolebinding:
 
@@ -418,10 +396,6 @@ sed -i 's/NAMESPACE/desired-value/g' *
 
     ```bash
     oc get rolebinding <rolebinding-name> -oyaml -n <namespace>
-    ```
-
-    ```
-    MANIFEST
     ```
 
     4.3.4. Create configmap:
