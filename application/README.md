@@ -158,10 +158,6 @@ sed -i 's/NAMESPACE/desired-value/g' *
     ```bash
     oc get clusterrole <clusterrole> -oyaml
     ```
-    
-    ```
-    MANIFEST
-    ```
 
     4.1.3. Create clusterolebinding:
 
@@ -179,10 +175,6 @@ sed -i 's/NAMESPACE/desired-value/g' *
 
     ```bash
     oc get clusterrolebinding <clusterolebinding-name> -oyaml
-    ```
-
-    ```
-    MANIFEST
     ```
 
     4.1.4. Deploy deployment:
@@ -268,10 +260,6 @@ sed -i 's/NAMESPACE/desired-value/g' *
     ```bash
     oc get clusterrole <clusterrole> -oyaml
     ```
-    
-    ```
-    MANIFEST
-    ```
 
     4.2.3. Create clusterolebinding:
 
@@ -289,10 +277,6 @@ sed -i 's/NAMESPACE/desired-value/g' *
 
     ```bash
     oc get clusterrolebinding <clusterrolebinding-name> -oyaml
-    ```
-
-    ```
-    MANIFEST
     ```
 
     4.2.4. Deploy prometheus:
@@ -358,9 +342,6 @@ sed -i 's/NAMESPACE/desired-value/g' *
     oc get secret -n <namespace>
     ```
 
-    MANIFEST
-
-
     4.3. Deploy grafana using the manifests given in `/infra/grafana/` directory. Follow the instructions one by one:
 
     4.3.1. Create serviceaccount:
@@ -397,10 +378,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     ```bash
     oc get role <role> -oyaml -n <namespace>
     ``` 
-    
-    ```
-    MANIFEST
-    ```
+
 
     4.3.3. Create rolebinding:
 
@@ -418,10 +396,6 @@ sed -i 's/NAMESPACE/desired-value/g' *
 
     ```bash
     oc get rolebinding <rolebinding-name> -oyaml -n <namespace>
-    ```
-
-    ```
-    MANIFEST
     ```
 
     4.3.4. Create configmap:
@@ -557,7 +531,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     5.2.1 Create serviceaccount:
     
     ```bash
-    oc apply -f serviceaccount.yaml -n <namespace>
+    oc apply -f catalog-serviceaccount.yaml -n <namespace>
     ```
 
     To check whether serviceaccount is created or not
@@ -568,13 +542,13 @@ sed -i 's/NAMESPACE/desired-value/g' *
     Once service account is created we will add a scc to that service account so that it can access node file system:
     
     ```bash
-    oc adm policy add-scc-to-user -z sa anyuid -n <namespace>
+    oc adm policy add-scc-to-user -z catalog-serviceaccount anyuid -n <namespace>
     ```
     
     5.2.2. Create role:
 
     ```bash
-    oc apply -f role.yaml -n <namespace>
+    oc apply -f catalog-role.yaml -n <namespace>
     ``` 
 
     To check whether role is created or not:
@@ -591,7 +565,7 @@ sed -i 's/NAMESPACE/desired-value/g' *
     5.2.3. Create rolebinding:
 
     ```bash
-    oc apply -f rolebinding.yaml -n <namespace>
+    oc apply -f catalog-rolebinding.yaml -n <namespace>
     ```
 
     To check whether rolebinding is created or not:
@@ -648,4 +622,11 @@ sed -i 's/NAMESPACE/desired-value/g' *
     ```bash
     oc apply -f route-gateway.yaml -n <namespace>
     oc apply -f web-gateway.yaml -n <namespace>
+    ```
+
+    5.2.10. Grafana can be accessed using the credentials given below:
+
+    ```
+    username: admin
+    password: stakater
     ```
